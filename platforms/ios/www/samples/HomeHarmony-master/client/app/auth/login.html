@@ -1,0 +1,25 @@
+<div class="mdl-grid">
+  <div class="mdl-grid">
+    <div class="mdl-cell mdl-cell--12-col mdl-cell--middle hh-form-overlay registration">
+      <div class="hh-form register-form">
+        <h1>Login</h1>
+        <hr>
+        <form name="loginForm" ng-submit='logInUser()'>
+          <input id="loginEmailField" type='email' name="userEmail" ng-model='email' placeholder="email"required autofocus>
+          <div role="alert">
+            <span class="error login-form-error" ng-show="loginForm.userEmail.$error.required">
+              Please enter your e-mail address</span>
+            <span class="error login-form-error" ng-show="myForm.userEmail.$error.email">
+              That is not a valid email</span>
+          </div>
+          <input id="loginPasswordField" type="password" ng-model='password' name="userPassword" placeholder="password"required />
+          <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
+            <span ng-if='showlogin'><img src="../../assets/loadingCircle.gif">
+            </span>
+              Login</button>
+        </form>
+        <a href="#/newUser">Don't have an account? <strong>Signup</strong>...</a>
+      </div>
+    </div>
+  </div>
+</div>

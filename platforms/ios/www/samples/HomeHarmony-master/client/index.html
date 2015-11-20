@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="homeHarmony">
+  <head>
+    <script src="./lib/firebaseLink.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- MaterialLite -->
+    <link rel="stylesheet" href="https://storage.googleapis.com/code.getmdl.io/1.0.3/material.teal-light_blue.min.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <script src="https://storage.googleapis.com/code.getmdl.io/1.0.3/material.min.js"></script>
+    <!-- CSS -->
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300,700|Roboto:400,100,700" rel="stylesheet" type="text/css">
+    <!-- Angularjs -->
+    <script src="./bower_components/angular/angular.js"></script>
+    <script src="./bower_components/angular-gravatar/build/angular-gravatar.js"></script>
+    <script src="./bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+    <script src="./bower_components/angular-messages/angular-messages.js"></script>
+    <!-- Firebase -->
+    <script src="https://cdn.firebase.com/js/client/2.2.9/firebase.js"></script>
+    <script src="https://cdn.firebase.com/libs/angularfire/1.1.2/angularfire.min.js"></script>
+    <script src="./bower_components/angular-gravatar/build/angular-gravatar.js"></script>
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+
+    <link rel="stylesheet" href="lib/styles/style.css">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
+    <title>Home Harmony</title>
+  </head>
+  <body>
+    <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+      <main-nav></main-nav>
+
+      <div class="mdl-layout__drawer">
+        <span class="mdl-layout-title"><h2>Home Harmony</h2></span>
+        <nav class="mdl-navigation">
+          <a class="mdl-navigation__link" ng-click="closeDrawer()" ui-sref="dash.default">
+            <h4><img src="assets/home.png" class="nav-icon" alt="home icon" href>Home</h4></a>
+          <a class="mdl-navigation__link" ng-click="closeDrawer()" ui-sref="dash.tasks">
+            <h4><img src="assets/list.png" class="nav-icon" alt="list icon" href>Tasks</h4></a>
+          <a class="mdl-navigation__link" ng-click="closeDrawer()" ui-sref="dash.shopping">
+            <h4><img src="assets/shopping.png" class="nav-icon" alt="chat icon" href>Shopping</h4></a>
+          <a class="mdl-navigation__link" ng-click="closeDrawer()" ui-sref="dash.expenses">
+            <h4><img src="assets/expense.png" class="nav-icon" alt="expense icon" href>Expenses</h4></a>
+          <a class="mdl-navigation__link" ng-click="closeDrawer()" ui-sref="dash.issues">
+            <h4><img src="assets/chat.png" class="nav-icon" alt="chat icon" href>Issues</h4></a>
+        </nav>
+      </div>
+
+      <main class="mdl-layout__content">
+        <div class="page-content" ui-view></div>
+      </main>
+    </div>
+    <!-- jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <!-- For Charts -->
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <!-- Main App Script Files -->
+    <script src="./app/util/util.js"></script>
+    <script src="./app/dash/dash.js"></script>
+    <script src="./app/auth/auth.js"></script>
+    <script src="./app/roomies/roomiesService.js"></script>
+    <script src="./app/issues/issues.js"></script>
+    <script src="./app/auth/loginController.js"></script>
+    <script src="./app/auth/newUserController.js"></script>
+    <script src="./app/dash/partials/newHouseController.js"></script>
+    <script src="./app/dash/partials/defaultController.js"></script>
+    <script src="./app/expenses/expensesController.js"></script>
+    <script src="./app/shopping/shoppingController.js"></script>
+    <script src="./app/tasks/tasksController.js"></script>
+    <script src="./app/nav/navDirective.js"></script>
+    <script src="./app/app.js"></script>
+  </body>
+</html>
