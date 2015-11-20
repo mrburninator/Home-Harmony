@@ -1,5 +1,42 @@
 <div class="text-center">
-	<h1>Dashboard Page</h1>
-	
-	<p>{{ message }}</p>
+  <h1>Dashboard Page</h1>
+  
+  <view class="padded" id="dashboard">
+    <div class="panel panel-success">
+      <div class="panel-heading">
+        <span class="panel-title">Notifications</span>
+        <span class="glyphicon glyphicon-collapse-down"></span>
+      </div>
+      <div class="panel-body animated">
+          *Notifications list goes here*
+      </div>
+    </div>
+  
+    <div class="panel panel-success">
+      <div class="panel-heading">
+        <span class="panel-title">Issues</span>
+        <span class="glyphicon glyphicon-collapse-down"></span>
+      </div>
+      <div class="panel-body animated">
+          *Issue list goes here*
+      </div>
+    </div>
+  
+    <div class="panel panel-success">
+      <div class="panel-heading">
+        <span class="panel-title" >Shopping List</span>
+        <span class="glyphicon glyphicon-collapse-down"></span>
+      </div>
+      <div class="panel-body animated">
+          *Shopping list info goes here*
+      </div>
+    </div>
+  </view>
 </div>
+
+<script>
+  $(".panel").off("click").on("click",function(){
+    $(this).toggleClass("untoggled");
+    $(".glyphicon",this).toggleClass("glyphicon-collapse-down").toggleClass("glyphicon-collapse-up");
+  });
+</script>

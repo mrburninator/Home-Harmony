@@ -1,8 +1,3 @@
-/*
-    TODO :
-        -put services into separate files
-*/
-
 angular.module('main', ['ngRoute', 'ngAnimate', 'LocalStorageModule'])
 .config(function($routeProvider, localStorageServiceProvider) {
     $routeProvider
@@ -30,6 +25,10 @@ angular.module('main', ['ngRoute', 'ngAnimate', 'LocalStorageModule'])
         templateUrl : 'pages/shoppinglist.html',
         controller  : 'shoppinglistController'
     })
+    .when('/settings', {
+        templateUrl : 'pages/settings.html',
+        controller  : 'settingsController'
+    })
     .otherwise({
         redirectTo: '/landing'
     });
@@ -39,6 +38,54 @@ angular.module('main', ['ngRoute', 'ngAnimate', 'LocalStorageModule'])
     .setStorageType('sessionStorage')
     .setNotify(true, true);
 })
+
+//define the services to be used by controllers
+.factory('userAPI', function() {
+    var user = {
+        login: function(name, password, fireDB, callback) {
+            fireDB.authWithPassword({
+              email    : name,
+              password : password
+            }, function(error, authData) {
+              if (error) {
+                console.log("Login Failed!", error);
+              } else {
+                // console.log("Authenticated successfully with payload:", authData);
+                callback();
+              }
+            });
+        },
+        register: function(name, password, fireDB, callback) {
+            fireDB.createUser({
+              email    : name,
+              password : password
+            }, function(error, userData) {
+                if (error) {
+                    console.log("Register Failed!", error);
+                } else {
+                    callback();
+                }
+            });
+        }
+    };
+    return user;
+})
+.factory('shoppingListAPI', function() {
+    var shoppingList = {
+    };
+    return shoppingList;
+})
+.factory('IssueAPI', function() {
+    var issue = {
+    };
+    return issue;
+})
+.factory('MesssageAPI', function() {
+    var message = {
+    };
+    return message;
+})
+
 //load the main controller
 .controller('mainController', ['$scope','localStorageService', function($scope, localStorageService) {
     //check if the user is logged in via cache:
@@ -57,8 +104,9 @@ angular.module('main', ['ngRoute', 'ngAnimate', 'LocalStorageModule'])
         $scope.user.isLoggedIn = false;
     };
 }])
-//load the controllers
-.controller('landingController', ['$scope','localStorageService', '$location', function($scope, localStorageService, $location) {
+
+//load the controllers for each view
+.controller('landingController', ['$scope','localStorageService', '$location', 'userAPI', function($scope, localStorageService, $location, userAPI) {
     $scope.fireDB = new Firebase("https://dazzling-torch-6918.firebaseio.com");
     $scope.loading = false;
     //check if the user is logged in
@@ -68,31 +116,15 @@ angular.module('main', ['ngRoute', 'ngAnimate', 'LocalStorageModule'])
         $location.path('dashboard');
     }
     
-    $scope.login = function(name,password,callback) {
-        $scope.fireDB.authWithPassword({
-          email    : name,
-          password : password
-        }, function(error, authData) {
-          if (error) {
-            console.log("Login Failed!", error);
-          } else {
-            console.log("Authenticated successfully with payload:", authData);  
-            callback()
-            $scope.$apply()
-          }
-        });  
-        
-    }
-    
     //TODO : implement login submit logic
     $scope.loginSubmit = function() {
         $scope.loading = true;
         //TODO : requires login service
-        $scope.login(this.usr, this.pwd, function(){
+        userAPI.login(this.usr, this.pwd, $scope.fireDB, function(){
             $scope.user.isLoggedIn = true;
             //go to dashboard
             $location.path('dashboard');
-            // $scope.loading = false;
+            $scope.$apply();
         });
     };
     
@@ -101,32 +133,23 @@ angular.module('main', ['ngRoute', 'ngAnimate', 'LocalStorageModule'])
         //TODO : requires register service
         if(this.usr_reg && this.pwd_reg) {
             $scope.loading = true;
-            $scope.fireDB.createUser({
-              email    : this.usr_reg,
-              password : this.pwd_reg
-            }, function(error, userData) {
-              if (error) {
-                console.log("Error creating user:", error);
-              } else {
-                console.log("Successfully created user account with uid:", userData.uid);
-                $scope.login(this.usr_reg,this.pwd_reg,function(loc){
-                    //On Success Case:
+            username = this.usr_reg;
+            password = this.pwd_reg;
+            userAPI.register(username, password, $scope.fireDB, function(){
+                userAPI.login(username, password, $scope.fireDB, function(){
                     $scope.user.isLoggedIn = true;
                     //go to dashboard
-                    loc.path('dashboard');
-                    $scope.loading = false;
-                }, $location)
-              }
+                    $location.path('dashboard');
+                    $scope.$apply();
+                });
             });
         } else {
             console.log('it didnt pass!!!');
         }
-        console.log('got to here!');
     };
     //toggle between login and register views on click
-        //TODO : check if this can be done with angular
     $('.toggle_view').on('click',function(){
-        $('ui-view').toggleClass('hidden');
+        $('view').toggleClass('hidden');
     });
 }])
 .controller('dashboardController', function($scope) {
@@ -143,6 +166,9 @@ angular.module('main', ['ngRoute', 'ngAnimate', 'LocalStorageModule'])
 })
 .controller('shoppinglistController', function($scope) {
     $scope.message = 'Shopping List !';
+})
+.controller('settingsController', function($scope) {
+    $scope.message = 'Settings !';
 });
 
 //close the nav bar for mobile after selecting a view
