@@ -33,7 +33,7 @@ angular.module('main', ['ngRoute', 'ngAnimate', 'LocalStorageModule'])
     .otherwise({
         redirectTo: '/landing'
     });
-    
+
     localStorageServiceProvider
     .setPrefix('HH')
     .setStorageType('sessionStorage')
@@ -44,14 +44,14 @@ angular.module('main', ['ngRoute', 'ngAnimate', 'LocalStorageModule'])
     //check if the user is logged in via cache:
     $scope.user = localStorageService.get('user') == null ? {isLoggedIn:false} : localStorageService.get('user');
     localStorageService.set('user',$scope.user)
-    
+
     //watch the user login value so we can make sure we update the cached value
     $scope.$watch("user.isLoggedIn",
         function loginChange( newValue, oldValue ) {
             localStorageService.set('user', $scope.user);
         }
     );
-    
+
     //handle logging out
     $scope.logoutSubmit = function() {
         $scope.user.isLoggedIn = false;
@@ -59,7 +59,7 @@ angular.module('main', ['ngRoute', 'ngAnimate', 'LocalStorageModule'])
 }])
 //load the controllers
 .controller('landingController', ['$scope','localStorageService', '$location', function($scope, localStorageService, $location) {
-    $scope.fireDB = new Firebase("https://dazzling-torch-6918.firebaseio.com");
+    $scope.fireDB = new Firebase("https://blazing-heat-3750.firebaseio.com/");
     $scope.loading = false;
     //check if the user is logged in
     //& redirect them to the dashboard if they are
@@ -67,7 +67,7 @@ angular.module('main', ['ngRoute', 'ngAnimate', 'LocalStorageModule'])
         //TODO : pull any necessary info from cache
         $location.path('dashboard');
     }
-    
+
     $scope.login = function(name,password,callback) {
         $scope.fireDB.authWithPassword({
           email    : name,
@@ -76,14 +76,14 @@ angular.module('main', ['ngRoute', 'ngAnimate', 'LocalStorageModule'])
           if (error) {
             console.log("Login Failed!", error);
           } else {
-            console.log("Authenticated successfully with payload:", authData);  
+            console.log("Authenticated successfully with payload:", authData);
             callback()
             $scope.$apply()
           }
-        });  
-        
+        });
+
     }
-    
+
     //TODO : implement login submit logic
     $scope.loginSubmit = function() {
         $scope.loading = true;
@@ -95,7 +95,7 @@ angular.module('main', ['ngRoute', 'ngAnimate', 'LocalStorageModule'])
             // $scope.loading = false;
         });
     };
-    
+
     //TODO : implement register submit logic
     $scope.registerSubmit = function() {
         //TODO : requires register service
