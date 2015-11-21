@@ -1,6 +1,25 @@
-<div class="text-center">
+<view class="padded">
+  <div class="text-center">
     <h1>Messaging Page</h1>
     
-    <p>static message here</p>
-    <p>{{ message }}</p>
-</div>
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <span class="panel-title">Notifications</span>
+        <span>*Badge Goes Here*</span>
+      </div>
+      <div class="panel-body">
+          <div>List of messages</div>
+      </div>
+    </div>
+    <div>
+      
+      <form role="form" ng-submit="registerSubmit()">
+        <div class="form-group">
+        <div class="form-group">
+          <input type="text" class="form-control" ng-model="msg"/>
+        </div>
+        <button type="button" class="btn btn-default">Send</button>
+      </form>
+    </div>
+  </div>
+<view>
