@@ -1,4 +1,4 @@
-angular.module('main', ['ngRoute', 'ngAnimate', 'LocalStorageModule'])
+angular.module('main', ['ngRoute', 'ngAnimate', 'LocalStorageModule','firebase'])
 .config(function($routeProvider, localStorageServiceProvider) {
   $routeProvider
   .when('/landing', {
@@ -170,15 +170,45 @@ $scope.logoutSubmit = function() {
   $('.toggle_view').on('click',function(){
     $('view').toggleClass('hidden');
   });
+
+
+
 }])
-.controller('dashboardController', function($scope) {
+.controller('dashboardController', function($scope,$firebaseArray) {
   $scope.message = 'Dashboard !';
+
+  //load the issue list
+  var issues = new Firebase("https://blazing-heat-3750.firebaseio.com/issues");
+  $scope.issues = $firebaseArray(issues);
+
 })
 .controller('homeController', function($scope) {
   $scope.message = 'Home !';
 })
-.controller('issueController', function($scope) {
+.controller('issueController', function($scope,$firebaseArray) {
   $scope.message = 'Issue !';
+  var ref = new Firebase("https://blazing-heat-3750.firebaseio.com/issues");
+  var authData = ref.getAuth();
+
+  $scope.issues = $firebaseArray(ref);
+
+  var currentUser = {};
+  if (authData) {
+    console.log("User ID: " + authData.uid + ", Provider: " + authData.provider);
+    currentUser = authData.uid;
+  } else {
+    console.log("user is logged out");
+  }
+  // user is logged out
+  console.log(currentUser);
+  $scope.addIssue = function() {
+    $scope.issues.$add({
+      text: $scope.newIssueText ,
+      creater: currentUser
+    });
+  };
+
+
 })
 .controller('messagingController', function($scope) {
   $scope.message = 'Messaging !';

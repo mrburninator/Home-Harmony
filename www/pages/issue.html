@@ -1,21 +1,29 @@
 <view class="padded">
   <div class="text-center">
     <h1>Issue Page</h1>
-    
+
     <div class="panel panel-default">
       <div class="panel-heading">
         <span class="panel-title">Add Issue</span>
+        <form ng-submit="addIssue()">
+          <input ng-model="newIssueText" placeholder="add your issue"/>
+          <button type="submit">Add Issue</button>
+        </form>
       </div>
     </div>
-    
+
     <div class="panel panel-default">
       <div class="panel-heading">
         <span class="panel-title">Issue List</span>
       </div>
       <div class="panel-body">
-          *List of Issues Goes Here*
+        *List of Issues Goes Here*
+        <!-- <input type="text" ng-model="data.text"/> -->
+        <ul class="list-group">
+          <li ng-repeat="data in issues" class="list-group-item"> List is {{ data.text}} which is created by {{data.creater}} </li>
+        </ul>
       </div>
     </div>
     
   </div>
-<view>
+  <view>
