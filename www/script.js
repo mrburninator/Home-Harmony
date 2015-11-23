@@ -218,13 +218,21 @@ $scope.logoutSubmit = function() {
 })
 .controller('settingsController', function($scope) {
   $scope.message = 'Settings !';
-});
-
-//close the nav bar for mobile after selecting a view
-$("#navbar").on('click',function(e) {
-  if( $(e.target).is('a')) {
-    $(this).collapse('hide');
-  }
+}).run(function ($rootScope, $location, localStorageService) {
+    //when a route changes, we check that the user is logged in.  If they aren't, we redirect them to the landing page
+    $rootScope.$on('$routeChangeStart', function (ev, next, curr) {
+        if (next.$$route) {
+            var user = localStorageService.get('user');
+            var isLoginPath = next.$$route.originalPath == "/" || next.$$route.originalPath == "/landing"
+            if(!isLoginPath && !user.isLoggedIn){ $location.path('/') }
+        }
+    })
+    //close the nav bar for mobile after selecting a view
+    $("#navbar").on('click',function(e) {
+      if( $(e.target).is('a')) {
+        $(this).collapse('hide');
+      }
+    });
 });
 
 window.addEventListener('load', function () {

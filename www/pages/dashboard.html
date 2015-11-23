@@ -1,38 +1,41 @@
 <div class="text-center">
   <h1>Dashboard Page</h1>
-
+  
   <view class="padded" id="dashboard">
-    <div class="panel panel-success">
-      <div class="panel-heading">
-        <span class="panel-title">Notifications</span>
-        <span class="glyphicon glyphicon-collapse-down"></span>
+    
+    <div class="row">
+      <div class="col-xs-12 col-sm-6 col-md-6">
+        <div class="panel panel-success">
+          <div class="panel-heading">
+            <span class="panel-title">Notifications</span>
+            <span class="glyphicon glyphicon-collapse-down"></span>
+          </div>
+          <div class="panel-body animated">
+              *Notifications list goes here*
+          </div>
+        </div>
       </div>
-      <div class="panel-body animated">
-          *Notifications list goes here*
+      <div class="col-xs-12 col-sm-6 col-md-6">
+        <div class="panel panel-success">
+          <div class="panel-heading">
+            <span class="panel-title">Issues</span>
+            <span class="glyphicon glyphicon-collapse-down"></span>
+          </div>
+          <div class="panel-body animated">
+              *Issue list goes here*
+          </div>
+        </div>
       </div>
-    </div>
-
-    <div class="panel panel-success">
-      <div class="panel-heading">
-        <span class="panel-title">Issues</span>
-        <span class="glyphicon glyphicon-collapse-down"></span>
-      </div>
-      <div class="panel-body animated">
-          *Issue list goes here*
-          <ul class="list-group">
-              <li ng-repeat="data in issues" class="list-group-item"> List is {{ data.text}} which is created by {{data.creater}}</li>
-          </ul>
-      </div>
-    </div>
-
-    <div class="panel panel-success">
-      <div class="panel-heading">
-        <span class="panel-title" >Shopping List</span>
-        <span class="glyphicon glyphicon-collapse-down"></span>
-      </div>
-      <div class="panel-body animated">
-          *Shopping list info goes here*
-
+      <div class="col-xs-12 col-sm-6 col-md-6">
+        <div class="panel panel-success">
+          <div class="panel-heading">
+            <span class="panel-title" >Shopping List</span>
+            <span class="glyphicon glyphicon-collapse-down"></span>
+          </div>
+          <div class="panel-body animated">
+              *Shopping list info goes here*
+          </div>
+        </div>
       </div>
     </div>
   </view>
