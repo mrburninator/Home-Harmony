@@ -1,0 +1,53 @@
+{
+  "name": "firechat",
+  "description": "Realtime open source chat client powered by Firebase",
+  "version": "0.0.0",
+  "author": "Firebase <support@firebase.com> (https://www.firebase.com/)",
+  "homepage": "https://firechat.firebaseapp.com/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/firebase/firechat.git"
+  },
+  "bugs": {
+    "url": "https://github.com/firebase/firechat/issues"
+  },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "http://firebase.mit-license.org/"
+    }
+  ],
+  "keywords": [
+    "chat",
+    "talk",
+    "firebase",
+    "realtime",
+    "websocket",
+    "synchronization"
+  ],
+  "main": "dist/firechat.js",
+  "files": [
+    "dist/**",
+    "LICENSE",
+    "README.md",
+    "package.json"
+  ],
+  "dependencies": {
+    "firebase": "2.0.x"
+  },
+  "devDependencies": {
+    "grunt": "~0.4.0",
+    "grunt-cli": "^0.1.13",
+    "grunt-contrib-clean": "~0.4.1",
+    "grunt-contrib-concat": "~0.1.1",
+    "grunt-contrib-jshint": "~0.1.0",
+    "grunt-contrib-jst": "~0.5.0",
+    "grunt-contrib-less": "~0.5.0",
+    "grunt-contrib-uglify": "~0.1.0",
+    "grunt-contrib-watch": "~0.1.4"
+  },
+  "scripts": {
+    "test": "gulp test",
+    "travis": "gulp travis"
+  }
+}

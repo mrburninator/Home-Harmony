@@ -1,3 +1,6 @@
+var firebaseURL = "https://blazing-heat-3750.firebaseio.com"; // Qingyu's FB
+//var firebaseURL = "https://dazzling-torch-6918.firebaseio.com"; // Robert's FB
+
 angular.module('main', ['ngRoute', 'ngAnimate', 'LocalStorageModule','firebase'])
 .config(function($routeProvider, localStorageServiceProvider) {
   $routeProvider
@@ -80,8 +83,48 @@ angular.module('main', ['ngRoute', 'ngAnimate', 'LocalStorageModule','firebase']
   };
   return issue;
 })
-.factory('MesssageAPI', function() {
+.factory('MessageAPI', function() {
   var message = {
+    chat: null,
+    //given the user authData, setup the firechat app, enter the house chatroom, and get the messages to display
+    chatInit: function(username, authData, chat, cb) {
+      console.log('setting up firechat...');
+      this.chat = chat;
+      
+      chat.setUser(authData.uid, username, function(user) {
+        chat.resumeSession();
+        cb();
+      });
+      console.log("LOGGING IN:");
+      console.log(username);
+    },
+    //sends a message to the user
+    sendMessage: function(roomID, message, cb) {
+      this.chat.sendMessage(roomID, message, messageType='default', function(){
+        cb();
+      })
+    },
+    //TODO : seems to be a bug when entering the room after creation
+    //when a new house is created we have to create a new chatroom
+    createMessageRoom: function(roomName) {
+      chat = this.chat;
+      chat.createRoom(roomName, "public", function(roomId){
+        console.log("room created!");
+        console.log(roomId);
+        chat.enterRoom(roomId);
+      });
+    },
+    //when a user leaves a house we have to make them leave that room
+    leaveMessageRoom: function() {
+      
+    },
+    //for testing
+    listRooms: function() {
+      chat = this.chat;
+      chat.getRoomList(function(rooms){
+        console.log(rooms);
+      });
+    }
   };
   return message;
 })
@@ -107,10 +150,10 @@ $scope.logoutSubmit = function() {
 
 //load the controllers for each view
 .controller('landingController', ['$scope','localStorageService', '$location', 'userAPI', function($scope, localStorageService, $location, userAPI) {
-  $scope.fireDB = new Firebase("https://blazing-heat-3750.firebaseio.com/");
-  //qingyu's firebase https://blazing-heat-3750.firebaseio.com/
-  //robert's firebase https://dazzling-torch-6918.firebaseio.com
+  $scope.fireDB = new Firebase(firebaseURL);
   $scope.loading = false;
+  //TODO : we should be storing the username in the db
+  $scope.userName = "mrburninator"; //for chat testing
   //check if the user is logged in
   //& redirect them to the dashboard if they are
   if($scope.user.isLoggedIn) {
@@ -131,9 +174,7 @@ $scope.logoutSubmit = function() {
         $scope.$apply()
       }
     });
-
   }
-
 
   //TODO : implement login submit logic
   $scope.loginSubmit = function() {
@@ -170,15 +211,13 @@ $scope.logoutSubmit = function() {
   $('.toggle_view').on('click',function(){
     $('view').toggleClass('hidden');
   });
-
-
-
+  
 }])
 .controller('dashboardController', function($scope,$firebaseArray) {
   $scope.message = 'Dashboard !';
 
   //load the issue list
-  var issues = new Firebase("https://blazing-heat-3750.firebaseio.com/issues");
+  var issues = new Firebase( firebaseURL + "/issues" );
   $scope.issues = $firebaseArray(issues);
 
 })
@@ -187,7 +226,7 @@ $scope.logoutSubmit = function() {
 })
 .controller('issueController', function($scope,$firebaseArray) {
   $scope.message = 'Issue !';
-  var ref = new Firebase("https://blazing-heat-3750.firebaseio.com/issues");
+  var ref = new Firebase( firebaseURL + "/issues" );
   var authData = ref.getAuth();
 
   $scope.issues = $firebaseArray(ref);
@@ -210,9 +249,37 @@ $scope.logoutSubmit = function() {
 
 
 })
-.controller('messagingController', function($scope) {
-  $scope.message = 'Messaging !';
-})
+.controller('messagingController', ['$scope', 'MessageAPI', '$firebaseArray', function($scope, MessageAPI, $firebaseArray) {
+  $scope.messages = [];
+  var ref = new Firebase( firebaseURL + "/chat" );
+  var chat = new Firechat(ref);
+  var my_room = false;
+  
+  chat.on("message-add", function(roomID,message){
+    $scope.messages.push(message);
+    $scope.$apply();
+  });
+  
+  chat.on("room-enter", function(room){
+    my_room = room.id
+  });
+  
+  var authData = ref.getAuth();
+  MessageAPI.chatInit($scope.userName, authData, chat, function(){
+    //callback function on success
+    // MessageAPI.createMessageRoom("dev-room");
+    // MessageAPI.sendMessage("-K3xAuSJm3NMz9KCToih", "Test 5... of many", messageType='default', function(){console.log("Message create successful!");})
+  });
+  
+  $scope.addMessageSubmit = function() {
+    if(my_room && this.msg) {
+      MessageAPI.sendMessage(my_room, this.msg, function(){
+          console.log("Message create successful!");
+          $('#msg').val('');
+      });
+    }
+  }
+}])
 .controller('shoppinglistController', function($scope) {
   $scope.message = 'Shopping List !';
 })
