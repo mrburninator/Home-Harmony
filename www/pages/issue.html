@@ -1,29 +1,55 @@
 <view class="padded">
   <div class="text-center">
-    <h1>Issue Page</h1>
-
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <span class="panel-title">Add Issue</span>
-        <form ng-submit="addIssue()">
-          <input ng-model="newIssueText" placeholder="add your issue"/>
-          <button type="submit">Add Issue</button>
-        </form>
+    
+    <div class="row">
+      
+      <div class="col-sm-12 col-md-4">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <span class="panel-title"><h3>Add Issue</h3></span>
+            <form ng-submit="addIssue()">
+              <div class="form-group">
+                <textarea ng-model="newIssueText" placeholder="add your issue" class="form-control" rows="5"></textarea>
+              </div>
+              <button type="submit" class="btn btn-default">Submit</button>
+              <div>TODO : need to select a user type here</div>
+            </form>
+          </div>
+        </div>
       </div>
-    </div>
-
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <span class="panel-title">Issue List</span>
+      
+      <div class="col-sm-12 col-md-8">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <span class="panel-title"><h3>Issue List</h3></span>
+          </div>
+          <div class="panel-body">
+            <ul class="list-group">
+              <li ng-repeat="data in issues" class="list-group-item"> 
+                <div>
+                  <div>
+                    Text : {{data.text}}
+                  </div>
+                  <div>
+                    Date Added : ?
+                  </div>
+                  <div>
+                    Checkbox - isChecked : ?
+                  </div>
+                </div>
+                <div>
+                  Creator : {{data.creater}}
+                </div>
+                <div>
+                  Directed Towards : ?
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
       </div>
-      <div class="panel-body">
-        *List of Issues Goes Here*
-        <!-- <input type="text" ng-model="data.text"/> -->
-        <ul class="list-group">
-          <li ng-repeat="data in issues" class="list-group-item"> List is {{ data.text}} which is created by {{data.creater}} </li>
-        </ul>
-      </div>
+      
     </div>
     
   </div>
-  <view>
+</view>
