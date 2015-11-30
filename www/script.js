@@ -1,8 +1,16 @@
+//configure requirejs
+requirejs.config({
+  baseUrl: '/'
+});
+
 var firebaseURL = "https://blazing-heat-3750.firebaseio.com"; // Qingyu's FB
 //var firebaseURL = "https://dazzling-torch-6918.firebaseio.com"; // Robert's FB
 
-angular.module('main', ['ngRoute', 'ngAnimate', 'LocalStorageModule','firebase'])
-.config(function($routeProvider, localStorageServiceProvider) {
+var app = angular.module('main', ['ngRoute', 'ngAnimate', 'LocalStorageModule','firebase']);
+
+app.config(function($routeProvider, localStorageServiceProvider, $controllerProvider) {
+  app.cp = $controllerProvider;
+  
   $routeProvider
   .when('/landing', {
     templateUrl : 'pages/landing.html',
@@ -128,171 +136,44 @@ angular.module('main', ['ngRoute', 'ngAnimate', 'LocalStorageModule','firebase']
   };
   return message;
 })
-
 //load the main controller
 .controller('mainController', ['$scope','localStorageService', function($scope, localStorageService) {
+  $scope.loading = false;
   //check if the user is logged in via cache:
   $scope.user = localStorageService.get('user') == null ? {isLoggedIn:false} : localStorageService.get('user');
   localStorageService.set('user',$scope.user)
 
   //watch the user login value so we can make sure we update the cached value
   $scope.$watch("user.isLoggedIn",
-  function loginChange( newValue, oldValue ) {
-    localStorageService.set('user', $scope.user);
-  }
-);
-
-//handle logging out
-$scope.logoutSubmit = function() {
-  $scope.user.isLoggedIn = false;
-};
-}])
-
-//load the controllers for each view
-.controller('landingController', ['$scope','localStorageService', '$location', 'userAPI', function($scope, localStorageService, $location, userAPI) {
-  $scope.fireDB = new Firebase(firebaseURL);
-  $scope.loading = false;
-  //TODO : we should be storing the username in the db
-  $scope.userName = "mrburninator"; //for chat testing
-  //check if the user is logged in
-  //& redirect them to the dashboard if they are
-  if($scope.user.isLoggedIn) {
-    //TODO : pull any necessary info from cache
-    $location.path('dashboard');
-  }
-
-  $scope.login = function(name,password,callback) {
-    $scope.fireDB.authWithPassword({
-      email    : name,
-      password : password
-    }, function(error, authData) {
-      if (error) {
-        console.log("Login Failed!", error);
-      } else {
-        console.log("Authenticated successfully with payload:", authData);
-        callback()
-        $scope.$apply()
-      }
-    });
-  }
-
-  //TODO : implement login submit logic
-  $scope.loginSubmit = function() {
-    $scope.loading = true;
-    //TODO : requires login service
-    userAPI.login(this.usr, this.pwd, $scope.fireDB, function(){
-      $scope.user.isLoggedIn = true;
-      //go to dashboard
-      $location.path('dashboard');
-      $scope.$apply();
-    });
-  };
-
-  //TODO : implement register submit logic
-  $scope.registerSubmit = function() {
-    //TODO : requires register service
-    if(this.usr_reg && this.pwd_reg) {
-      $scope.loading = true;
-      username = this.usr_reg;
-      password = this.pwd_reg;
-      userAPI.register(username, password, $scope.fireDB, function(){
-        userAPI.login(username, password, $scope.fireDB, function(){
-          $scope.user.isLoggedIn = true;
-          //go to dashboard
-          $location.path('dashboard');
-          $scope.$apply();
-        });
-      });
-    } else {
-      console.log('it didnt pass!!!');
+    function loginChange( newValue, oldValue ) {
+      localStorageService.set('user', $scope.user);
     }
+  );
+
+  //handle logging out
+  $scope.logoutSubmit = function() {
+    $scope.user.isLoggedIn = false;
   };
-  //toggle between login and register views on click
-  $('.toggle_view').on('click',function(){
-    $('view').toggleClass('hidden');
-  });
-  
 }])
-.controller('dashboardController', function($scope,$firebaseArray) {
-  $scope.message = 'Dashboard !';
-
-  //load the issue list
-  var issues = new Firebase( firebaseURL + "/issues" );
-  $scope.issues = $firebaseArray(issues);
-
-})
-.controller('homeController', function($scope) {
-  $scope.message = 'Home !';
-})
-.controller('issueController', function($scope,$firebaseArray) {
-  $scope.message = 'Issue !';
-  var ref = new Firebase( firebaseURL + "/issues" );
-  var authData = ref.getAuth();
-
-  $scope.issues = $firebaseArray(ref);
-
-  var currentUser = {};
-  if (authData) {
-    console.log("User ID: " + authData.uid + ", Provider: " + authData.provider);
-    currentUser = authData.uid;
-  } else {
-    console.log("user is logged out");
-  }
-  // user is logged out
-  console.log(currentUser);
-  $scope.addIssue = function() {
-    $scope.issues.$add({
-      text: $scope.newIssueText ,
-      creater: currentUser
-    });
-  };
-
-
-})
-.controller('messagingController', ['$scope', 'MessageAPI', '$firebaseArray', function($scope, MessageAPI, $firebaseArray) {
-  $scope.messages = [];
-  var ref = new Firebase( firebaseURL + "/chat" );
-  var chat = new Firechat(ref);
-  var my_room = false;
-  
-  chat.on("message-add", function(roomID,message){
-    $scope.messages.push(message);
-    $scope.$apply();
-  });
-  
-  chat.on("room-enter", function(room){
-    my_room = room.id
-  });
-  
-  var authData = ref.getAuth();
-  MessageAPI.chatInit($scope.userName, authData, chat, function(){
-    //callback function on success
-    // MessageAPI.createMessageRoom("dev-room");
-    // MessageAPI.sendMessage("-K3xAuSJm3NMz9KCToih", "Test 5... of many", messageType='default', function(){console.log("Message create successful!");})
-  });
-  
-  $scope.addMessageSubmit = function() {
-    if(my_room && this.msg) {
-      MessageAPI.sendMessage(my_room, this.msg, function(){
-          console.log("Message create successful!");
-          $('#msg').val('');
-      });
-    }
-  }
-}])
-.controller('shoppinglistController', function($scope) {
-  $scope.message = 'Shopping List !';
-})
-.controller('settingsController', function($scope) {
-  $scope.message = 'Settings !';
-}).run(function ($rootScope, $location, localStorageService) {
-    //when a route changes, we check that the user is logged in.  If they aren't, we redirect them to the landing page
+//need to load a dummy for the landing controller
+.controller('landingController', [function($scope) {}])
+.run(function ($rootScope, $location, localStorageService, $route) {
     $rootScope.$on('$routeChangeStart', function (ev, next, curr) {
-        if (next.$$route) {
-            var user = localStorageService.get('user');
-            var isLoginPath = next.$$route.originalPath == "/" || next.$$route.originalPath == "/landing"
-            if(!isLoginPath && !user.isLoggedIn){ $location.path('/') }
-        }
+      if (next.$$route) {
+          //when a route changes, we check that the user is logged in.  If they aren't, we redirect them to the landing page
+          var user = localStorageService.get('user');
+          var isLoginPath = next.$$route.originalPath == "/" || next.$$route.originalPath == "/landing"
+          if(!isLoginPath && !user.isLoggedIn){ $location.path('/') }
+          
+          if(!requirejs.defined("controllers" + next.$$route.originalPath + ".js")) {
+            requirejs(["controllers" + next.$$route.originalPath + ".js"], function(controller) {
+              controller(app.cp);
+              $location.path(next.$$route.originalPath);
+              $route.reload(); //reload the route now that the controller is loaded
+            }); 
+            ev.preventDefault(); //prevent the controller from being accessed before it has been loaded
+          }
+      }
     })
     //close the nav bar for mobile after selecting a view
     $("#navbar").on('click',function(e) {
@@ -302,6 +183,7 @@ $scope.logoutSubmit = function() {
     });
 });
 
+//attach fastclick for better mobile responsiveness
 window.addEventListener('load', function () {
   FastClick.attach(document.body);
 });
