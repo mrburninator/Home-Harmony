@@ -1,6 +1,6 @@
 define('controllers/issue.js', [], function () {
   return function controller(cp) {
-    cp.register('issueController', function($scope,$firebaseArray) {
+    cp.register('issueController', ['$scope', '$rootScope', function($scope,$rootScope,$firebaseArray) {
       $scope.message = 'Issue !';
       var ref = new Firebase( firebaseURL + "/issues" );
       var authData = ref.getAuth();
@@ -22,6 +22,6 @@ define('controllers/issue.js', [], function () {
           creater: currentUser
         });
       };
-    });
+    }]);
   }
 });

@@ -10,7 +10,7 @@ var app = angular.module('main', ['ngRoute', 'ngAnimate', 'LocalStorageModule','
 
 app.config(function($routeProvider, localStorageServiceProvider, $controllerProvider) {
   app.cp = $controllerProvider;
-  
+
   $routeProvider
   .when('/landing', {
     templateUrl : 'pages/landing.html',
@@ -61,26 +61,67 @@ app.config(function($routeProvider, localStorageServiceProvider, $controllerProv
         if (error) {
           console.log("Login Failed!", error);
         } else {
-          // console.log("Authenticated successfully with payload:", authData);
+          //TODO : on login check if the user has a house
+          // $scope.hasHouse = localStorageService.get('hasHouse') == null ? {hasHouse:false} : localStorageService.get('user');
+          //console.log("Authenticated successfully with payload:", authData);
+
           callback();
+
         }
       });
     },
-    register: function(name, password, fireDB, callback) {
+
+    register: function(username ,email, password, fireDB, callback) {
+
       fireDB.createUser({
-        email    : name,
+        email    : email,
         password : password
       }, function(error, userData) {
-        if (error) {
-          console.log("Register Failed!", error);
-        } else {
+        if (error) { console.log("Register Failed!", error); }
+        else {
+          //Create a new user on the database
+
+          //new user object
+          var user = {
+            "email" : email,
+            "username" : username,
+            "password" : password,
+            "houses" : []
+          };
+
+          //Create a new child and store the reference
+          var userID = fireDB.child('users').push(user);
+          //Finish registration and callback
           callback();
         }
       });
-    }
+    } //end of register
+
   };
   return user;
 })
+
+
+.factory('homeAPI', function() {
+  var home = {
+    createHome : function(homeName){
+      tempHome = {
+        "name" : homeName,
+        "users" : null,
+        "messages" : null,
+        "shoppinglist" : null,
+        "issues" : null
+      };
+      //TODO : should return a home id
+    },
+    joinHome : function(homeID){
+      //TODO : given a home id, add a user to the users child
+
+    }
+  };
+  return home;
+})
+
 .factory('shoppingListAPI', function() {
   var shoppingList = {
   };
@@ -98,7 +139,7 @@ app.config(function($routeProvider, localStorageServiceProvider, $controllerProv
     chatInit: function(username, authData, chat, cb) {
       console.log('setting up firechat...');
       this.chat = chat;
-      
+
       chat.setUser(authData.uid, username, function(user) {
         chat.resumeSession();
         cb();
@@ -124,7 +165,7 @@ app.config(function($routeProvider, localStorageServiceProvider, $controllerProv
     },
     //when a user leaves a house we have to make them leave that room
     leaveMessageRoom: function() {
-      
+
     },
     //for testing
     listRooms: function() {
@@ -136,11 +177,20 @@ app.config(function($routeProvider, localStorageServiceProvider, $controllerProv
   };
   return message;
 })
+
+
 //load the main controller
 .controller('mainController', ['$scope','localStorageService', function($scope, localStorageService) {
   $scope.loading = false;
+
   //check if the user is logged in via cache:
   $scope.user = localStorageService.get('user') == null ? {isLoggedIn:false} : localStorageService.get('user');
+  //if the user is logged in, then check if they have a house they are assigned to
+  if($scope.user.isLoggedIn) {
+    $scope.hasHouse = localStorageService.get('hasHouse') == null ? false : localStorageService.get('hasHouse');
+  } else {
+    $scope.hasHouse = false;
+  }
   localStorageService.set('user',$scope.user)
 
   //watch the user login value so we can make sure we update the cached value
@@ -155,6 +205,8 @@ app.config(function($routeProvider, localStorageServiceProvider, $controllerProv
     $scope.user.isLoggedIn = false;
   };
 }])
+
+
 //need to load a dummy for the landing controller
 .controller('landingController', [function($scope) {}])
 .run(function ($rootScope, $location, localStorageService, $route) {
@@ -164,13 +216,13 @@ app.config(function($routeProvider, localStorageServiceProvider, $controllerProv
           var user = localStorageService.get('user');
           var isLoginPath = next.$$route.originalPath == "/" || next.$$route.originalPath == "/landing"
           if(!isLoginPath && !user.isLoggedIn){ $location.path('/') }
-          
+
           if(!requirejs.defined("controllers" + next.$$route.originalPath + ".js")) {
             requirejs(["controllers" + next.$$route.originalPath + ".js"], function(controller) {
               controller(app.cp);
               $location.path(next.$$route.originalPath);
               $route.reload(); //reload the route now that the controller is loaded
-            }); 
+            });
             ev.preventDefault(); //prevent the controller from being accessed before it has been loaded
           }
       }
@@ -182,6 +234,7 @@ app.config(function($routeProvider, localStorageServiceProvider, $controllerProv
       }
     });
 });
+
 
 //attach fastclick for better mobile responsiveness
 window.addEventListener('load', function () {
