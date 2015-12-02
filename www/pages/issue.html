@@ -9,14 +9,36 @@
             <span class="panel-title"><h3>Add Issue</h3></span>
             <form ng-submit="addIssue()">
               <div class="form-group">
-                <textarea ng-model="newIssueText" placeholder="add your issue" class="form-control" rows="5"></textarea>
-                <textarea ng-model="AssignedToUID" placeholder="add assigned to uid " class="form-control" rows="5"></textarea>
+                
+                <!-- IssueText Area-->
+                <textarea ng-model="newIssueText" placeholder="add your issue" class="form-control" rows="3"></textarea>
+                
+                <!-- Repeat or Not -->
                 <div class="checkbox">
-                   <label><input type="checkbox" ng-model="Repeat" value="">Repeat</label>
+                   <label><input type="checkbox" ng-model="Repeat">Repeat</label>
                 </div>
+                          
+                <!-- dropdown list to choose roommate -->
+                <div class="dropdown">
+                <!-- do not use <div data-ng-controller="issueController">
+                   will cause trouble -->
+                  <div>
+                    Current assign to {{choosenroommate.$value}}  
+                    <!-- id {{choosenroommate.$id}} -->
+                    </br> 
+                    <!--  full info is {{choosenroommate}} -->
+                    <div>
+                        Assign to? :
+                        <select data-ng-model="choosenroommate"
+                                data-ng-options="act['$value'] for act in roommatelist">                
+                        </select>
+                   </div>
+                 </div>
               </div>
+              
               <button type="submit" class="btn btn-default">Submit</button>
-              <div>TODO : need to select a user type here</div>
+              </div>
+         
             </form>
           </div>
         </div>
