@@ -2,10 +2,13 @@ define('controllers/landing.js', [], function () {
   return function controller(cp) {
     cp.register('landingController', ['$scope','$rootScope','localStorageService', '$location', 'userAPI', function($scope, $rootScope, localStorageService, $location, userAPI) {
       //remove
-      //$rootScope.test = 'test';
-      //console.log('landingController says: setting rootscope.test:',$rootScope.test);
+      $rootScope.test = 'test';
+      console.log('landingController says: setting rootscope.test:',$rootScope.test);
 
+      //TODO : get rid of redundancy here
       $scope.fireDB = new Firebase(firebaseURL);
+      $rootScope.fireDB = new Firebase(firebaseURL);
+
       $scope.loading = false;
       //TODO : we should be storing the username in the db
       $scope.userName = "mrburninator"; //for chat testing
@@ -36,13 +39,18 @@ define('controllers/landing.js', [], function () {
         $scope.loading = true;
         //TODO : requires login service
         userAPI.login(this.usr, this.pwd, $scope.fireDB, function(auth){
-          console.log(auth);
           $scope.user.isLoggedIn = true;
-          // $scope.user.currentUserID = auth.id;
-          // $scope.user.currentUserEmail = this.usr;
-          // $scope.user.currentPass = this.pwd;
-          // $scope.user.currentHomeID = auth.id;
-            //TODO : check if the user has a house-
+          // $rootScope.user.isLoggedIn = true;
+          console.log(auth);
+          $rootScope.user = {};
+          $rootScope.user.currentUserID = auth.uid;
+          $rootScope.user.currentUserEmail = this.usr;
+          $rootScope.user.currentPass = this.pwd;
+
+          $rootScope.fireDB.child('users').child($rootScope.user.currentUserID).child('houses').once('value',function(data){
+            var houses = data.val();
+            $rootScope.hasHouse = houses > 0 ? true : false;
+            $scope.hasHouse = $rootScope.hasHouse;
             if($scope.hasHouse) {
               //if true, go to dashboard.  else go to home page
               $location.path('dashboard');
@@ -50,6 +58,7 @@ define('controllers/landing.js', [], function () {
               $location.path('home');
             }
             $scope.$apply();
+          });
         });
       };
 

@@ -61,11 +61,11 @@ app.config(function($routeProvider, localStorageServiceProvider, $controllerProv
         if (error) {
           console.log("Login Failed!", error);
         } else {
-          //TODO : on login check if the user has a house
+//TODO : on login check if the user has a house
           // $scope.hasHouse = localStorageService.get('hasHouse') == null ? {hasHouse:false} : localStorageService.get('user');
           //console.log("Authenticated successfully with payload:", authData);
 
-          callback();
+          callback(authData);
 
         }
       });
