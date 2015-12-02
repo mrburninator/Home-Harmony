@@ -1,6 +1,6 @@
 define('controllers/issue.js', [], function () {
   return function controller(cp) {
-    cp.register('issueController', function($scope,$firebaseArray) {
+    cp.register('issueController', ['$scope', '$rootScope', function($scope,$rootScope,$firebaseArray) {
       $scope.message = 'Issue !';
       console.log("scope message is " + $scope.message);
       var baseRef = new Firebase( firebaseURL ); 
@@ -57,6 +57,6 @@ define('controllers/issue.js', [], function () {
         });
     
       };
-    });
+    }]);
   }
 });

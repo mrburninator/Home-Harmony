@@ -1,6 +1,10 @@
 define('controllers/landing.js', [], function () {
   return function controller(cp) {
-    cp.register('landingController', ['$scope','localStorageService', '$location', 'userAPI', function($scope, localStorageService, $location, userAPI) {
+    cp.register('landingController', ['$scope','$rootScope','localStorageService', '$location', 'userAPI', function($scope, $rootScope, localStorageService, $location, userAPI) {
+      //remove
+      //$rootScope.test = 'test';
+      //console.log('landingController says: setting rootscope.test:',$rootScope.test);
+
       $scope.fireDB = new Firebase(firebaseURL);
       $scope.loading = false;
       //TODO : we should be storing the username in the db
@@ -31,11 +35,21 @@ define('controllers/landing.js', [], function () {
       $scope.loginSubmit = function() {
         $scope.loading = true;
         //TODO : requires login service
-        userAPI.login(this.usr, this.pwd, $scope.fireDB, function(){
+        userAPI.login(this.usr, this.pwd, $scope.fireDB, function(auth){
+          console.log(auth);
           $scope.user.isLoggedIn = true;
-          //go to dashboard
-          $location.path('dashboard');
-          $scope.$apply();
+          // $scope.user.currentUserID = auth.id;
+          // $scope.user.currentUserEmail = this.usr;
+          // $scope.user.currentPass = this.pwd;
+          // $scope.user.currentHomeID = auth.id;
+            //TODO : check if the user has a house-
+            if($scope.hasHouse) {
+              //if true, go to dashboard.  else go to home page
+              $location.path('dashboard');
+            } else {
+              $location.path('home');
+            }
+            $scope.$apply();
         });
       };
 
@@ -44,13 +58,14 @@ define('controllers/landing.js', [], function () {
         //TODO : requires register service
         if(this.usr_reg && this.pwd_reg) {
           $scope.loading = true;
-          username = this.usr_reg;
+          username = this.usr_name;
+          email = this.usr_reg;
           password = this.pwd_reg;
-          userAPI.register(username, password, $scope.fireDB, function(){
-            userAPI.login(username, password, $scope.fireDB, function(){
+          userAPI.register(username, email, password, $scope.fireDB, function(){
+            userAPI.login(email, password, $scope.fireDB, function(){
               $scope.user.isLoggedIn = true;
               //go to dashboard
-              $location.path('dashboard');
+              $location.path('home');
               $scope.$apply();
             });
           });
