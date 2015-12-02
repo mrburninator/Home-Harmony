@@ -10,6 +10,10 @@
             <form ng-submit="addIssue()">
               <div class="form-group">
                 <textarea ng-model="newIssueText" placeholder="add your issue" class="form-control" rows="5"></textarea>
+                <textarea ng-model="AssignedToUID" placeholder="add assigned to uid " class="form-control" rows="5"></textarea>
+                <div class="checkbox">
+                   <label><input type="checkbox" ng-model="Repeat" value="">Repeat</label>
+                </div>
               </div>
               <button type="submit" class="btn btn-default">Submit</button>
               <div>TODO : need to select a user type here</div>
@@ -28,20 +32,20 @@
               <li ng-repeat="data in issues" class="list-group-item"> 
                 <div>
                   <div>
-                    Text : {{data.text}}
+                    Name : {{data.Name}}
                   </div>
                   <div>
-                    Date Added : ?
+                    AssignedBy : {{data.AssignedBy.userName}}
                   </div>
                   <div>
-                    Checkbox - isChecked : ?
+                    Done : {{data.Done}}
                   </div>
                 </div>
                 <div>
-                  Creator : {{data.creater}}
+                  Assigned To : {{data.AssignedTo.userName}}
                 </div>
                 <div>
-                  Directed Towards : ?
+                  Repeat:  {{data.Repeat}}
                 </div>
               </li>
             </ul>
