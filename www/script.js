@@ -1,24 +1,3 @@
-/*
-Rootscope variables: ($rootScope)
-  fireDB
-  hasHouse
-
-  user = {
-    username:
-    email: (FU)
-    password:
-    house:
-
-    isLoggedIn:
-    currentUserEmail:
-    currentUserID: -- GET RID OF THIS
-    currentPass:
-    currentHouseID:
-    currentHouseName:
-  }
-
-
-*/
 //configure requirejs
 requirejs.config({
   baseUrl: '/'
@@ -72,102 +51,76 @@ app.config(function($routeProvider, localStorageServiceProvider, $controllerProv
 })
 
 //define the services to be used by controllers
-.factory('userAPI', ['$rootScope', function($rootScope) {
+.factory('userAPI', function() {
   var user = {
     login: function(name, password, fireDB, callback) {
+      fireDB.authWithPassword({
+        email    : name,
+        password : password
+      }, function(error, authData) {
+        if (error) {
+          console.log("Login Failed!", error);
+        } else {
+//TODO : on login check if the user has a house
+          // $scope.hasHouse = localStorageService.get('hasHouse') == null ? {hasHouse:false} : localStorageService.get('user');
+          //console.log("Authenticated successfully with payload:", authData);
 
-        //Check whether user already exists & username/password match
-        $rootScope.fireDB.child('users').child(name).once("value", function (user){
-          var userObj = user.val();
-          if (user.exists() &&  userObj.username == name &&  userObj.password == password){
-            console.log('Login for username:', userObj.username, ' success!');
-            //TODO : check if the user has a house
-            callback();
-          } else {
-            console.log('Login for username:', name, ' failed.');
-          }
-        });
+          callback(authData);
 
+        }
+      });
     },
 
     register: function(username ,email, password, fireDB, callback) {
-      //TODO : check if email exists in /users
-      $rootScope.fireDB.child('users').child(username).once("value", function(snapshot){
-          if(snapshot.exists()){
-            //FAIL
-            console.log('Registration for user:', username, 'failed.\n');
-          } else {
-            var user = {}
-            user.email = email;
-            user.username = username;
-            user.password = password;
-            user.houses = [];
 
-            //Create a new child and store the reference
-            var userID = fireDB.child('users').child(user.username).set(user);
+      fireDB.createUser({
+        email    : email,
+        password : password
+      }, function(error, userData) {
+        if (error) { console.log("Register Failed!", error); }
+        else {
+          //Create a new user on the database
 
-            //remove
-            console.log('Registration for user:', username, 'succesful.\n');
-            //Finish registration and callback
-            callback();
-              // }
-            // });
-          }
+          //new user object
+          var user = {
+            "email" : email,
+            "username" : username,
+            "password" : password,
+            "houses" : []
+          };
+
+          //Create a new child and store the reference
+          var userID = fireDB.child('users').push(user);
+          //Finish registration and callback
+          callback();
+        }
       });
-    }
+    } //end of register
 
   };
   return user;
-}])
+})
 
 
-.factory('homeAPI', ['$rootScope', 'userAPI', '$location', function($rootScope, userAPI, $location) {
+.factory('homeAPI', function() {
   var home = {
     createHome : function(homeName){
-      var house = {
-        "name": homeName
+      tempHome = {
+        "name" : homeName,
+        "users" : null,
+        "messages" : null,
+        "shoppinglist" : null,
+        "issues" : null
       };
-      $rootScope.fireDB.child('houses').child(homeName).set(house);
-
+      //TODO : should return a home id
     },
     joinHome : function(homeID){
       //TODO : given a home id, add a user to the users child
 
-      //remove
-      console.log('RootScope contents:', $rootScope.user);
-
-      var tempUser = {};
-      tempUser.name = $rootScope.user.username;
-
-      //Check whether a house exists
-      $rootScope.fireDB.child('houses').child(homeID).once("value", function(snapshot){
-          //make sure the house exists before trying to join it
-          if(snapshot.exists()){
-            console.log('The house', homeID, 'exists!!!');
-
-            //Update rootScope
-            $rootScope.hasHouse = true;
-            $rootScope.user.house = homeID;
-
-            //Add the user to the house
-            $rootScope.currentHomeID = $rootScope.fireDB.child('houses').child(homeID).child('users').child(tempUser.name).set(tempUser);
-
-            //Add the house to the user's database
-            $rootScope.fireDB.child('users').child($rootScope.user.username).child('houses').set(homeID);
-
-            //TODO: Add multiple houses later.
-            $location.path('dashboard');
-            $rootScope.$apply();
-          } else {
-            //TODO : dialog window that alerts the user the house does not exist
-            console.log('The house', homeID, 'does not exist!!!');
-          }
-        }, function(){ console.log("error!"); }
-      );
     }
   };
   return home;
-}])
+})
 
 .factory('shoppingListAPI', function() {
   var shoppingList = {
@@ -227,8 +180,7 @@ app.config(function($routeProvider, localStorageServiceProvider, $controllerProv
 
 
 //load the main controller
-.controller('mainController', ['$scope','localStorageService', '$rootScope', function($scope, localStorageService, $rootScope) {
-  $rootScope.fireDB = new Firebase(firebaseURL);
+.controller('mainController', ['$scope','localStorageService', function($scope, localStorageService) {
   $scope.loading = false;
 
   //check if the user is logged in via cache:
@@ -243,12 +195,6 @@ app.config(function($routeProvider, localStorageServiceProvider, $controllerProv
 
   //watch the user login value so we can make sure we update the cached value
   $scope.$watch("user.isLoggedIn",
-    function loginChange( newValue, oldValue ) {
-      localStorageService.set('user', $scope.user);
-    }
-  );
-
-  $scope.$watch("user.hasHouse",
     function loginChange( newValue, oldValue ) {
       localStorageService.set('user', $scope.user);
     }

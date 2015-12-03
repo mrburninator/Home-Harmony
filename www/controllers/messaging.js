@@ -1,6 +1,8 @@
 define('controllers/messaging.js', [], function () {
   return function controller(cp) {
     cp.register('messagingController', ['$scope', '$rootScope', 'MessageAPI', '$firebaseArray', function($scope, $rootScope, MessageAPI, $firebaseArray) {
+      //remove
+      console.log('messagingController says:', $rootScope.test);
 
       $scope.messages = [];
       var ref = new Firebase( firebaseURL + "/chat" );

@@ -9,36 +9,10 @@
             <span class="panel-title"><h3>Add Issue</h3></span>
             <form ng-submit="addIssue()">
               <div class="form-group">
-                
-                <!-- IssueText Area-->
-                <textarea ng-model="newIssueText" placeholder="add your issue" class="form-control" rows="3"></textarea>
-                
-                <!-- Repeat or Not -->
-                <div class="checkbox">
-                   <label><input type="checkbox" ng-model="Repeat">Repeat</label>
-                </div>
-                          
-                <!-- dropdown list to choose roommate -->
-                <div class="dropdown">
-                <!-- do not use <div data-ng-controller="issueController">
-                   will cause trouble -->
-                  <div>
-                    Current assign to {{choosenroommate.$value}}  
-                    <!-- id {{choosenroommate.$id}} -->
-                    </br> 
-                    <!--  full info is {{choosenroommate}} -->
-                    <div>
-                        Assign to? :
-                        <select data-ng-model="choosenroommate"
-                                data-ng-options="act['$value'] for act in roommatelist">                
-                        </select>
-                   </div>
-                 </div>
+                <textarea ng-model="newIssueText" placeholder="add your issue" class="form-control" rows="5"></textarea>
               </div>
-              
               <button type="submit" class="btn btn-default">Submit</button>
-              </div>
-         
+              <div>TODO : need to select a user type here</div>
             </form>
           </div>
         </div>
@@ -54,20 +28,20 @@
               <li ng-repeat="data in issues" class="list-group-item"> 
                 <div>
                   <div>
-                    Name : {{data.Name}}
+                    Text : {{data.text}}
                   </div>
                   <div>
-                    AssignedBy : {{data.AssignedBy.userName}}
+                    Date Added : ?
                   </div>
                   <div>
-                    Done : {{data.Done}}
+                    Checkbox - isChecked : ?
                   </div>
                 </div>
                 <div>
-                  Assigned To : {{data.AssignedTo.userName}}
+                  Creator : {{data.creater}}
                 </div>
                 <div>
-                  Repeat:  {{data.Repeat}}
+                  Directed Towards : ?
                 </div>
               </li>
             </ul>

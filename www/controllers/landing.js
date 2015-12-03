@@ -1,9 +1,13 @@
 define('controllers/landing.js', [], function () {
   return function controller(cp) {
     cp.register('landingController', ['$scope','$rootScope','localStorageService', '$location', 'userAPI', function($scope, $rootScope, localStorageService, $location, userAPI) {
+      //remove
+      $rootScope.test = 'test';
+      console.log('landingController says: setting rootscope.test:',$rootScope.test);
 
       //TODO : get rid of redundancy here
       $scope.fireDB = new Firebase(firebaseURL);
+      $rootScope.fireDB = new Firebase(firebaseURL);
 
       $scope.loading = false;
       //TODO : we should be storing the username in the db
@@ -33,27 +37,21 @@ define('controllers/landing.js', [], function () {
       //TODO : implement login submit logic
       $scope.loginSubmit = function() {
         $scope.loading = true;
-        var username = this.name;
-        var password = this.pwd;
-
-        userAPI.login(username, this.pwd, $scope.fireDB, function(auth){
-          // console.log(auth);
+        //TODO : requires login service
+        userAPI.login(this.usr, this.pwd, $scope.fireDB, function(auth){
           $scope.user.isLoggedIn = true;
-
+          // $rootScope.user.isLoggedIn = true;
+          console.log(auth);
           $rootScope.user = {};
-          $rootScope.user.isLoggedIn = true;
-          $rootScope.user.username = username;
-          $rootScope.user.password = password;
+          $rootScope.user.currentUserID = auth.uid;
+          $rootScope.user.currentUserEmail = this.usr;
+          $rootScope.user.currentPass = this.pwd;
 
-
-          $rootScope.fireDB.child('users').child($rootScope.user.username).child('houses').once('value',function(data){
-            //TODO : check exists
+          $rootScope.fireDB.child('users').child($rootScope.user.currentUserID).child('houses').once('value',function(data){
             var houses = data.val();
-            $rootScope.hasHouse = houses ? true : false;
+            $rootScope.hasHouse = houses > 0 ? true : false;
             $scope.hasHouse = $rootScope.hasHouse;
-
             if($scope.hasHouse) {
-              $rootScope.user.house = houses;
               //if true, go to dashboard.  else go to home page
               $location.path('dashboard');
             } else {
@@ -72,9 +70,6 @@ define('controllers/landing.js', [], function () {
           username = this.usr_name;
           email = this.usr_reg;
           password = this.pwd_reg;
-          //TODO : see if register already exists in /users - fail if it does.
-          //otherwise, do user register
-
           userAPI.register(username, email, password, $scope.fireDB, function(){
             userAPI.login(email, password, $scope.fireDB, function(){
               $scope.user.isLoggedIn = true;
