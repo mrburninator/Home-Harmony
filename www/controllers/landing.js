@@ -1,9 +1,6 @@
 define('controllers/landing.js', [], function () {
   return function controller(cp) {
     cp.register('landingController', ['$scope','$rootScope','localStorageService', '$location', 'userAPI', function($scope, $rootScope, localStorageService, $location, userAPI) {
-      //remove
-      $rootScope.test = 'test';
-      console.log('landingController says: setting rootscope.test:',$rootScope.test);
 
       //TODO : get rid of redundancy here
       $scope.fireDB = new Firebase(firebaseURL);
@@ -50,11 +47,13 @@ define('controllers/landing.js', [], function () {
 
 
           $rootScope.fireDB.child('users').child($rootScope.user.username).child('houses').once('value',function(data){
+            //TODO : check exists
             var houses = data.val();
-            $rootScope.hasHouse = houses > 0 ? true : false;
+            $rootScope.hasHouse = houses ? true : false;
             $scope.hasHouse = $rootScope.hasHouse;
 
             if($scope.hasHouse) {
+              $rootScope.user.house = houses;
               //if true, go to dashboard.  else go to home page
               $location.path('dashboard');
             } else {
