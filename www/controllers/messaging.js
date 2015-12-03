@@ -1,37 +1,30 @@
 define('controllers/messaging.js', [], function () {
   return function controller(cp) {
     cp.register('messagingController', ['$scope', '$rootScope', 'MessageAPI', '$firebaseArray', function($scope, $rootScope, MessageAPI, $firebaseArray) {
-      //remove
-      console.log('messagingController says:', $rootScope.test);
+      //start with empty messages
+      $scope.messages = {};
+      $scope.messages.everyone = [];
+      //get all the users in the house
+      $rootScope.fireDB.child('houses').child($rootScope.user.house).child('users').once("value", function (users){
+        console.log('loading users : ', users.val());
+        $scope.users = users.val() ? users.val() : {};
 
-      $scope.messages = [];
-      var ref = new Firebase( firebaseURL + "/chat" );
-      var chat = new Firechat(ref);
-      var my_room = false;
-
-      chat.on("message-add", function(roomID,message){
-        $scope.messages.push(message);
-        $scope.$apply();
+        //populate the general house chat
+        $rootScope.fireDB.child('houses').child($rootScope.user.house).child('messages').child('everyone').on("value", function (messages){
+          $scope.messages.everyone = [];
+          var msgs = messages.val();
+          //TODO : preprocessing of messages can be done here (add user image, ect)
+          for (var key in msgs) {
+            $scope.messages.everyone.push(msgs[key]);
+          }
+        });
+        //TODO : future work - other, private message, chats
       });
-
-      chat.on("room-enter", function(room){
-        my_room = room.id
-      });
-
-      var authData = ref.getAuth();
-      MessageAPI.chatInit($scope.userName, authData, chat, function(){
-        //callback function on success
-        // MessageAPI.createMessageRoom("dev-room");
-        // MessageAPI.sendMessage("-K3xAuSJm3NMz9KCToih", "Test 5... of many", messageType='default', function(){console.log("Message create successful!");})
-      });
-
+      //on message submit call
       $scope.addMessageSubmit = function() {
-        if(my_room && this.msg) {
-          MessageAPI.sendMessage(my_room, this.msg, function(){
-              console.log("Message create successful!");
-              $('#msg').val('');
-          });
-        }
+        console.log('message sent!');
+        MessageAPI.sendMessage("everyone", this.msg);
+        $('#msg').val('');
       }
     }]);
   }

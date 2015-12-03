@@ -1,26 +1,15 @@
 define('controllers/landing.js', [], function () {
   return function controller(cp) {
     cp.register('landingController', ['$scope','$rootScope','localStorageService', '$location', 'userAPI', function($scope, $rootScope, localStorageService, $location, userAPI) {
-      //remove
-      $rootScope.test = 'test';
-      console.log('landingController says: setting rootscope.test:',$rootScope.test);
-
-      //TODO : get rid of redundancy here
-      $scope.fireDB = new Firebase(firebaseURL);
-      $rootScope.fireDB = new Firebase(firebaseURL);
-
       $scope.loading = false;
-      //TODO : we should be storing the username in the db
-      $scope.userName = "mrburninator"; //for chat testing
       //check if the user is logged in
       //& redirect them to the dashboard if they are
-      if($scope.user.isLoggedIn) {
-        //TODO : pull any necessary info from cache
+      if($rootScope.user.isLoggedIn) {
         $location.path('dashboard');
       }
 
       $scope.login = function(name,password,callback) {
-        $scope.fireDB.authWithPassword({
+        $rootScope.fireDB.authWithPassword({
           email    : name,
           password : password
         }, function(error, authData) {
@@ -34,24 +23,28 @@ define('controllers/landing.js', [], function () {
         });
       }
 
-      //TODO : implement login submit logic
+      //implement login submit logic
       $scope.loginSubmit = function() {
         $scope.loading = true;
-        //TODO : requires login service
-        userAPI.login(this.usr, this.pwd, $scope.fireDB, function(auth){
-          $scope.user.isLoggedIn = true;
-          // $rootScope.user.isLoggedIn = true;
-          console.log(auth);
-          $rootScope.user = {};
-          $rootScope.user.currentUserID = auth.uid;
-          $rootScope.user.currentUserEmail = this.usr;
-          $rootScope.user.currentPass = this.pwd;
+        var username = this.name;
+        var password = this.pwd;
 
-          $rootScope.fireDB.child('users').child($rootScope.user.currentUserID).child('houses').once('value',function(data){
-            var houses = data.val();
-            $rootScope.hasHouse = houses > 0 ? true : false;
-            $scope.hasHouse = $rootScope.hasHouse;
+        userAPI.login(username, this.pwd, $scope.fireDB, function(auth){
+          $rootScope.user = {};
+          $rootScope.user.isLoggedIn = true;
+          $rootScope.user.username = username;
+          $rootScope.user.password = password;
+
+          $rootScope.fireDB.child('users').child($rootScope.user.username).child('houses').once('value',function(data){
+            //make sure the user has a house before proceeding
+            if(data.exists()) {
+              var houses = data.val();
+              $rootScope.hasHouse = houses ? true : false;
+            } else {
+              $rootScope.hasHouse = false;
+            }
             if($scope.hasHouse) {
+              $rootScope.user.house = houses;
               //if true, go to dashboard.  else go to home page
               $location.path('dashboard');
             } else {
@@ -62,24 +55,25 @@ define('controllers/landing.js', [], function () {
         });
       };
 
-      //TODO : implement register submit logic
+      //implement register submit logic
       $scope.registerSubmit = function() {
-        //TODO : requires register service
         if(this.usr_reg && this.pwd_reg) {
           $scope.loading = true;
           username = this.usr_name;
           email = this.usr_reg;
           password = this.pwd_reg;
+          //register the user, then log them in.
           userAPI.register(username, email, password, $scope.fireDB, function(){
-            userAPI.login(email, password, $scope.fireDB, function(){
-              $scope.user.isLoggedIn = true;
+            userAPI.login(username, password, $scope.fireDB, function(){
+              $rootScope.user.isLoggedIn = true;
               //go to dashboard
               $location.path('home');
               $scope.$apply();
             });
           });
         } else {
-          console.log('it didnt pass!!!');
+          //TODO : do a dialog popup here
+          console.log('WARNING - EMPTY USERNAME OR PASSWORD NOT ALLOWED');
         }
       };
       //toggle between login and register views on click
