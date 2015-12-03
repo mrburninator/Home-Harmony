@@ -23,14 +23,14 @@
                 <!-- do not use <div data-ng-controller="issueController">
                    will cause trouble -->
                   <div>
-                    Current assign to {{choosenroommate.$value}}  
+                    Current assign to {{choosenroommate.name}}  
                     <!-- id {{choosenroommate.$id}} -->
                     </br> 
                     <!--  full info is {{choosenroommate}} -->
                     <div>
                         Assign to? :
                         <select data-ng-model="choosenroommate"
-                                data-ng-options="act['$value'] for act in roommatelist">                
+                                data-ng-options="act.$id for act in roommatelist">                
                         </select>
                    </div>
                  </div>
@@ -48,27 +48,29 @@
         <div class="panel panel-default">
           <div class="panel-heading">
             <span class="panel-title"><h3>Issue List</h3></span>
+            <button ng-click="filterToggle()">{{DisplayMode}}</button>
           </div>
           <div class="panel-body">
+            
             <ul class="list-group">
-              <li ng-repeat="data in issues" class="list-group-item"> 
-                <div>
+              <li ng-repeat="data in issues" class="list-group-item" ng-if="issueFilter(data,toggleFlag)"> 
+                
                   <div>
                     Name : {{data.Name}}
-                  </div>
+                  </div>              
                   <div>
-                    AssignedBy : {{data.AssignedBy.userName}}
+                    AssignedBy : {{data.AssignedBy}}
                   </div>
                   <div>
                     Done : {{data.Done}}
-                  </div>
-                </div>
-                <div>
-                  Assigned To : {{data.AssignedTo.userName}}
-                </div>
-                <div>
+                  </div>               
+                  <div>
+                    Assigned To : {{data.AssignedTo.name}}
+                  </div>                
+                  <div>
                   Repeat:  {{data.Repeat}}
-                </div>
+                  </div>
+                  
               </li>
             </ul>
           </div>

@@ -1,20 +1,23 @@
 define('controllers/issue.js', [], function () {
   return function controller(cp) {
-    cp.register('issueController', ['$scope', '$rootScope', '$firebaseArray' function($scope,$rootScope,$firebaseArray) {
+    cp.register('issueController', ['$scope', '$rootScope', '$firebaseArray',function($scope,$rootScope,$firebaseArray) {
 
       $scope.message = 'Issue !';
       console.log("scope message is " + $scope.message);
       var baseRef = new Firebase( firebaseURL );
-      var ref = baseRef.child("/houses/houses1/issues" );
+      console.log('RootScope Status:', $rootScope.user);
+      var ref = baseRef.child('/houses/' + $rootScope.user.house + '/issues' );
       //ar ref = new Firebase( firebaseURL + "/houses/houses1/issues" );
       var authData = ref.getAuth();
 
       $scope.issues = $firebaseArray(ref);
 
-
-      var roomMateRef = baseRef.child("/houses/houses1/users");
+      $scope.choosenroommate = {"$value":" choose some one"};
+      var roomMateRef = baseRef.child('/houses/' + $rootScope.user.house +'/users');
       $scope.roommatelist = $firebaseArray(roomMateRef);
       $scope.Repeat = false;
+      
+      
 
       var currentUserUid = {};
       if (authData) {
@@ -25,39 +28,48 @@ define('controllers/issue.js', [], function () {
       }
       // user is logged out
       console.log(currentUserUid);
-
-
-      var AssignedByName = "temp";
-      var AssignedToName = "temp";
-      $scope.choosenroommate = {"$value":" ","$id":"choose one","$priority":null};
-      var userRef = baseRef.child("/users/"+currentUserUid+"/name");
-
-
+      
 
       //add Issue
-      $scope.addIssue = function() {
-        userRef.once("value", function(data) {
-        AssignedByName = data.val();
-        console.log("AssignedByName" + AssignedByName);
-        console.log("choose roommate " + $scope.choosenroommate.$id + "value is " + $scope.choosenroommate.$value  );
-
-        var userRef2 = baseRef.child("/users/"+$scope.choosenroommate['$id']+"/name");
-
-        userRef2.once("value", function(data) {
-            AssignedToName = data.val();
-            console.log("AssignedToName" + AssignedToName);
+      $scope.addIssue = function() { 
+            console.log("AssignedToName" , $scope.choosenroommate);
             $scope.issues.$add({
                 Name: $scope.newIssueText ,
                 Done: "false" ,
-                AssignedBy: {userName : AssignedByName, userID: currentUserUid },
-                AssignedTo : {userName: AssignedToName, userID: $scope.choosenroommate['$id'] },
+                AssignedBy: $rootScope.user.username,
+                AssignedTo : $scope.choosenroommate ,
                 Repeat: $scope.Repeat
             });
-          });
-
-        });
 
       };
+      
+      
+      //issue filter
+      $scope.issueFilter = function(issue,toggleFlag) {
+        if (toggleFlag)
+          return true;
+        if (issue.AssignedTo.name==$rootScope.user.username)
+        {
+            //console.log(issue);
+            return true;
+        }
+         else return false;
+      };
+      
+      
+      $scope.DisplayMode =  "Only Show my issues"; 
+      
+      $scope.filterToggle = function() {
+            $scope.toggleFlag = $scope.toggleFlag === false ? true: false;
+            if ($scope.toggleFlag) 
+            {
+               $scope.DisplayMode =  "Show all";   
+            } else {
+               $scope.DisplayMode =  "Only Show my issues";
+            }
+        };
+        
+        
     }]);
   }
 });
