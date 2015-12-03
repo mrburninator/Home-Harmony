@@ -1,8 +1,9 @@
 define('controllers/dashboard.js', [], function () {
   return function controller(cp) {
     cp.register('dashboardController', ['$scope', '$rootScope', '$firebaseArray', function($scope, $rootScope, $firebaseArray) {
+
       //remove
-      console.log('dashboardController says:', $rootScope.test);
+      console.log('RootScope Status:', $rootScope);
 
       $scope.message = 'Dashboard !';
 

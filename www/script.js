@@ -114,24 +114,6 @@ app.config(function($routeProvider, localStorageServiceProvider, $controllerProv
             // });
           }
       });
-    },
-    //using the saved userID, we can load all the relevant info
-    loadHouse: function(){
-      if($rootScope.user && $rootScope.user.currentUserID && $rootScope.hasHouse){
-        //get the house id
-        $rootScope.fireDB.child('users').child($rootScope.user.currentUserID).child('houses').once("value", function(snapshot){
-          if(snapshot.exists()){
-            console.log('loading house ', snapshot.val());
-            $rootScope.user.currentHouseID = snapshot.val();
-            //get the house name
-            $rootScope.fireDB.child('houses').child($rootScope.user.currentHouseID).child('name').once("value", function(houseName){
-              $rootScope.user.currentHouseID = houseName.val();
-            });
-          }
-        });
-      } else {
-        console.log("WARNING - cannot load user house right now");
-      }
     }
 
   };
@@ -145,7 +127,8 @@ app.config(function($routeProvider, localStorageServiceProvider, $controllerProv
       var house = {
         "name": homeName
       };
-      $rootScope.currentHomeID = $rootScope.fireDB.child('houses').child(homeName).set(house);
+      $rootScope.fireDB.child('houses').child(homeName).set(house);
+
     },
     joinHome : function(homeID){
       //TODO : given a home id, add a user to the users child
@@ -174,6 +157,7 @@ app.config(function($routeProvider, localStorageServiceProvider, $controllerProv
 
             //TODO: Add multiple houses later.
             $location.path('dashboard');
+            $rootScope.$apply();
           } else {
             //TODO : dialog window that alerts the user the house does not exist
             console.log('The house', homeID, 'does not exist!!!');
@@ -259,6 +243,12 @@ app.config(function($routeProvider, localStorageServiceProvider, $controllerProv
 
   //watch the user login value so we can make sure we update the cached value
   $scope.$watch("user.isLoggedIn",
+    function loginChange( newValue, oldValue ) {
+      localStorageService.set('user', $scope.user);
+    }
+  );
+
+  $scope.$watch("user.hasHouse",
     function loginChange( newValue, oldValue ) {
       localStorageService.set('user', $scope.user);
     }
