@@ -2,6 +2,7 @@ define('controllers/issue.js', [], function () {
   return function controller(cp) {
     cp.register('issueController', ['$scope', '$rootScope', '$firebaseArray',function($scope,$rootScope,$firebaseArray) {
 
+
       $scope.message = 'Issue !';
       console.log("scope message is " + $scope.message);
       var baseRef = new Firebase( firebaseURL );

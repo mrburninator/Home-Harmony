@@ -127,7 +127,7 @@ app.config(function($routeProvider, localStorageServiceProvider, $controllerProv
       var house = {
         "name": homeName
       };
-      $rootScope.fireDB.child('houses').child(homeName).set(house);
+      $rootScope.currentHomeID = $rootScope.fireDB.child('houses').child(homeName).set(house);
 
     },
     joinHome : function(homeID){
@@ -164,6 +164,14 @@ app.config(function($routeProvider, localStorageServiceProvider, $controllerProv
           }
         }, function(){ console.log("error!"); }
       );
+    },
+    leaveHome : function(){
+      console.log('leaving home...');
+      console.log('user: ',$rootScope.user);
+      $rootScope.fireDB.child('users').child($rootScope.user.username).child('houses').remove();
+      $rootScope.fireDB.child('houses').child($rootScope.user.house).child('users').child($rootScope.user.username).remove();
+      $rootScope.hasHouse = false;
+      $rootScope.user.house = false;
     }
   };
   return home;
@@ -179,84 +187,73 @@ app.config(function($routeProvider, localStorageServiceProvider, $controllerProv
   };
   return issue;
 })
-.factory('MessageAPI', function() {
+.factory('MessageAPI', ['$rootScope', function($rootScope) {
+  //TODO : redo this chat - 
+  /*
+    different channel types:
+      -everyone
+      -username1-username2-...-usernameN
+      *alphabetize the usernames
+    
+  */
   var message = {
-    chat: null,
-    //given the user authData, setup the firechat app, enter the house chatroom, and get the messages to display
-    chatInit: function(username, authData, chat, cb) {
-      console.log('setting up firechat...');
-      this.chat = chat;
-
-      chat.setUser(authData.uid, username, function(user) {
-        chat.resumeSession();
-        cb();
-      });
-      console.log("LOGGING IN:");
-      console.log(username);
-    },
     //sends a message to the user
-    sendMessage: function(roomID, message, cb) {
-      this.chat.sendMessage(roomID, message, messageType='default', function(){
-        cb();
-      })
-    },
-    //TODO : seems to be a bug when entering the room after creation
-    //when a new house is created we have to create a new chatroom
-    createMessageRoom: function(roomName) {
-      chat = this.chat;
-      chat.createRoom(roomName, "public", function(roomId){
-        console.log("room created!");
-        console.log(roomId);
-        chat.enterRoom(roomId);
-      });
-    },
-    //when a user leaves a house we have to make them leave that room
-    leaveMessageRoom: function() {
-
-    },
-    //for testing
-    listRooms: function() {
-      chat = this.chat;
-      chat.getRoomList(function(rooms){
-        console.log(rooms);
-      });
+    sendMessage: function(group, message) {
+      var to_send = {};
+      to_send.message = message;
+      to_send.name = $rootScope.user.username;
+      //just append to the group the text
+      $rootScope.fireDB.child('houses').child($rootScope.user.house).child('messages').child(group).push(to_send);
     }
   };
   return message;
-})
+}])
 
 
 //load the main controller
 .controller('mainController', ['$scope','localStorageService', '$rootScope', function($scope, localStorageService, $rootScope) {
+  //create the fireDB instance
   $rootScope.fireDB = new Firebase(firebaseURL);
+  //for long-latency calls, you can set this to true
   $scope.loading = false;
 
   //check if the user is logged in via cache:
-  $scope.user = localStorageService.get('user') == null ? {isLoggedIn:false} : localStorageService.get('user');
-  //if the user is logged in, then check if they have a house they are assigned to
-  if($scope.user.isLoggedIn) {
-    $scope.hasHouse = localStorageService.get('hasHouse') == null ? false : localStorageService.get('hasHouse');
-  } else {
-    $scope.hasHouse = false;
-  }
-  localStorageService.set('user',$scope.user)
+  $rootScope.user = localStorageService.get('user') == null ? {isLoggedIn:false} : localStorageService.get('user');
 
   //watch the user login value so we can make sure we update the cached value
-  $scope.$watch("user.isLoggedIn",
+  $rootScope.$watch("user.isLoggedIn",
+    function loginChange( newValue, oldValue ) {
+      $scope.user = $rootScope.user;
+      localStorageService.set('user', $scope.user);
+      //TODO : how does this log the user out??? // navigation change???
+    }
+  );
+  $rootScope.$watch("user.house",
     function loginChange( newValue, oldValue ) {
       localStorageService.set('user', $scope.user);
     }
   );
-
-  $scope.$watch("user.hasHouse",
+  //watch for if the user joins or leaves a house - navigation changes accordingly.
+  $rootScope.$watch("hasHouse",
     function loginChange( newValue, oldValue ) {
-      localStorageService.set('user', $scope.user);
+      $scope.hasHouse = $rootScope.hasHouse;
+      localStorageService.set('hasHouse', $scope.hasHouse);
     }
   );
 
-  //handle logging out
+  //if the user is logged in, then check if they have a house they are assigned to
+  if($rootScope.user.isLoggedIn) {
+    $rootScope.hasHouse = localStorageService.get('hasHouse') == null ? false : localStorageService.get('hasHouse');
+  } else {
+    $rootScope.hasHouse = false;
+  }
+
+  localStorageService.set('user',$rootScope.user)
+  $rootScope.hasHouse = localStorageService.get('hasHouse') == null ? false : localStorageService.get('hasHouse');
+
+  //handle logging out - triggers a watch event
   $scope.logoutSubmit = function() {
-    $scope.user.isLoggedIn = false;
+    $rootScope.user.isLoggedIn = false;
   };
 }])
 
@@ -288,7 +285,6 @@ app.config(function($routeProvider, localStorageServiceProvider, $controllerProv
       }
     });
 });
-
 
 //attach fastclick for better mobile responsiveness
 window.addEventListener('load', function () {
