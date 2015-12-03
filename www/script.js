@@ -81,6 +81,7 @@ app.config(function($routeProvider, localStorageServiceProvider, $controllerProv
           var userObj = user.val();
           if (user.exists() &&  userObj.username == name &&  userObj.password == password){
             console.log('Login for username:', userObj.username, ' success!');
+            //TODO : check if the user has a house
             callback();
           } else {
             console.log('Login for username:', name, ' failed.');
@@ -138,7 +139,7 @@ app.config(function($routeProvider, localStorageServiceProvider, $controllerProv
 }])
 
 
-.factory('homeAPI', ['$rootScope', 'userAPI', function($rootScope, userAPI) {
+.factory('homeAPI', ['$rootScope', 'userAPI', '$location', function($rootScope, userAPI, $location) {
   var home = {
     createHome : function(homeName){
       var house = {
