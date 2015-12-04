@@ -1,35 +1,35 @@
 <view class="padded">
   <div class="text-center">
-    
+
     <div class="row">
-      
+
       <div class="col-sm-12 col-md-4">
         <div class="panel panel-default">
           <div class="panel-heading">
             <span class="panel-title"><h3>Add Issue</h3></span>
             <form ng-submit="addIssue()">
-                
+
                 <!-- IssueText Area-->
                 <textarea ng-model="newIssueText" placeholder="add your issue" class="form-control" rows="3"></textarea>
-                
+
                 <!-- Repeat or Not -->
                 <div class="checkbox">
                    <label><input type="checkbox" ng-model="Repeat">Repeat</label>
                 </div>
-                          
+
                 <!-- dropdown list to choose roommate -->
                 <div class="dropdown">
                 <!-- do not use <div data-ng-controller="issueController">
                    will cause trouble -->
                   <div>
-                    Current assign to {{choosenroommate.name}}  
+                    Current assign to {{choosenroommate.name}}
                     <!-- id {{choosenroommate.$id}} -->
-                    </br> 
+                    </br>
                     <!--  full info is {{choosenroommate}} -->
                     <div>
                         Assign to? :
                         <select data-ng-model="choosenroommate"
-                                data-ng-options="act.$id for act in roommatelist">                
+                                data-ng-options="act.$id for act in roommatelist">
                         </select>
                    </div>
                  </div>
@@ -41,7 +41,7 @@
           </div>
         </div>
       </div>
-      
+
       <div class="col-sm-12 col-md-8">
         <div class="panel panel-default">
           <div class="panel-heading">
@@ -49,35 +49,35 @@
             <button ng-click="filterToggle()">{{DisplayMode}}</button>
           </div>
           <div class="panel-body">
-            
+
             <ul class="list-group">
-              <li ng-repeat="data in issues" class="list-group-item" ng-if="issueFilter(data,toggleFlag)"> 
-                
+              <li ng-repeat="data in issues" class="list-group-item" ng-if="issueFilter(data,toggleFlag)">
+
                   <div>
 
                     Name : {{data.Name}}
-                  </div>              
+                  </div>
                   <div>
                     AssignedBy : {{data.AssignedBy}}
                   </div>
                   <div>
                     Done : {{data.Done}}
-                  </div>               
+                  </div>
                   <div>
                     Assigned To : {{data.AssignedTo.name}}
-                  </div>                
+                  </div>
                   <div>
                   Repeat:  {{data.Repeat}}
                   </div>
-                   <button type="button" class="btn btn-primary" ng-if="showDone(data)" ng-click="markDone(data)">Done</button>  
+
 
               </li>
             </ul>
           </div>
         </div>
       </div>
-      
+
     </div>
-    
+
   </div>
 </view>
