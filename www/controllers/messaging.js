@@ -2,6 +2,9 @@ define('controllers/messaging.js', [], function () {
   return function controller(cp) {
     cp.register('messagingController', ['$scope', '$rootScope', 'MessageAPI', '$firebaseArray', function($scope, $rootScope, MessageAPI, $firebaseArray) {
       $scope.user = $rootScope.user;
+      $scope.isEmpty = {};
+      $scope.isEmpty.messages = false;
+      $rootScope.pageName = 'Messaging'
       //start with empty messages
       $scope.messages = {};
       $scope.messages.everyone = [];
@@ -21,6 +24,7 @@ define('controllers/messaging.js', [], function () {
             }
             $scope.messages.everyone.push(msgs[key]);
           }
+          $scope.isEmpty.messages = $scope.messages.everyone.length > 0 ? false : true;
           // $scope.$apply();
         });
         //TODO : future work - other, private message, chats

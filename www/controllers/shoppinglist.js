@@ -1,9 +1,12 @@
 define('controllers/shoppinglist.js', [], function () {
   return function controller(cp) {
     cp.register('shoppinglistController', ['$scope', '$rootScope', function($scope, $rootScope) {
+      $rootScope.pageName = 'Shopping List'
       $scope.itemName = '';
       $scope.quantity = 1;
       $scope.list = [];
+      $scope.isEmpty = {};
+      $scope.isEmpty.shoppinglist = false;
 
       //Populate the List
         $rootScope.fireDB.child('houses').child($rootScope.user.house).child('shoppinglist').on("value", function (items){
@@ -14,6 +17,7 @@ define('controllers/shoppinglist.js', [], function () {
             $scope.list.push(itm[key]);
           }
           console.log('list:',$scope.list);
+          $scope.isEmpty.shoppinglist = $scope.list.length > 0 ? false : true;
           // $scope.$apply();
         });
 

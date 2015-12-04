@@ -1,10 +1,10 @@
 define('controllers/issue.js', [], function () {
   return function controller(cp) {
     cp.register('issueController', ['$scope', '$rootScope', '$firebaseArray',function($scope,$rootScope,$firebaseArray) {
+      $scope.isEmpty = {};
+      $scope.isEmpty.issues = false;
+      $rootScope.pageName = 'Issues'
 
-
-      $scope.message = 'Issue !';
-      console.log("scope message is " + $scope.message);
       var baseRef = new Firebase( firebaseURL );
       console.log('RootScope Status:', $rootScope.user);
       var ref = baseRef.child('/houses/' + $rootScope.user.house + '/issues' );
@@ -12,6 +12,8 @@ define('controllers/issue.js', [], function () {
       var authData = ref.getAuth();
 
       $scope.issues = $firebaseArray(ref);
+
+      $scope.isEmpty.issues = $scope.issues.length > 0 ? false : true;
 
       $scope.choosenroommate = {"$value":" choose some one"};
       var roomMateRef = baseRef.child('/houses/' + $rootScope.user.house +'/users');

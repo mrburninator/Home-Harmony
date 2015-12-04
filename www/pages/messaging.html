@@ -4,6 +4,7 @@
     <div class="panel panel-default">
       <div class="panel-body">
           <ul class="list-group messageList">
+            <li class="list-group-item" ng-if="isEmpty.messages==true">No Messages Received</li>
             <li ng-repeat-start="data in messages.everyone" class="list-group-item" ng-class="{mine : data.mine}">
               <div>
                 <img src="assets/default_user.png"/>

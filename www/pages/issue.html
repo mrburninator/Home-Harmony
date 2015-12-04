@@ -44,6 +44,7 @@
           <div class="panel-body">
 
             <ul class="list-group">
+              <li class="list-group-item" ng-if="isEmpty.issues==true">No Issues Yet</li>
               <li ng-repeat="data in issues" class="list-group-item" ng-if="issueFilter(data,toggleFlag)">
 
                   <div>

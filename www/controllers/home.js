@@ -3,7 +3,7 @@ define('controllers/home.js', [], function () {
     cp.register('homeController', ['$scope','$rootScope', 'homeAPI', function($scope, $rootScope, homeAPI) {
       //remove
       console.log('homeController says:' + $rootScope.test);
-
+      $rootScope.pageName = 'Join a Home'
         $scope.createHomeSubmit = function() {
           console.log("create home submit happened");
           homeAPI.createHome(this.home_name);

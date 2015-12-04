@@ -16,7 +16,9 @@ Rootscope variables: ($rootScope)
     currentHouseName:
   }
 
+
 */
+
 //configure requirejs
 requirejs.config({
   baseUrl: '/'
@@ -233,6 +235,14 @@ app.config(function($routeProvider, localStorageServiceProvider, $controllerProv
     function loginChange( newValue, oldValue ) {
       $scope.hasHouse = $rootScope.hasHouse;
       localStorageService.set('hasHouse', $scope.hasHouse);
+    }
+  );
+  console.log('adding listener...');
+  //change page title on transition
+  $rootScope.$watch("pageName",
+    function loginChange( newValue, oldValue ) {
+      console.log('PAGE CHANGE DETECTED!!!');
+      $scope.pageName = $rootScope.pageName;
     }
   );
 

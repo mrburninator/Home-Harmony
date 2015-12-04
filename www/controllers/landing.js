@@ -1,7 +1,7 @@
 define('controllers/landing.js', [], function () {
   return function controller(cp) {
     cp.register('landingController', ['$scope','$rootScope','localStorageService', '$location', 'userAPI', function($scope, $rootScope, localStorageService, $location, userAPI) {
-
+      $rootScope.pageName = 'Landing Page'
       //TODO : get rid of redundancy here
       $scope.fireDB = new Firebase(firebaseURL);
 
