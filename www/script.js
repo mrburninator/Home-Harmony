@@ -172,6 +172,8 @@ app.config(function($routeProvider, localStorageServiceProvider, $controllerProv
       $rootScope.fireDB.child('houses').child($rootScope.user.house).child('users').child($rootScope.user.username).remove();
       $rootScope.hasHouse = false;
       $rootScope.user.house = false;
+      //redirect to home page
+      $location.path('home');
     }
   };
   return home;
@@ -188,13 +190,13 @@ app.config(function($routeProvider, localStorageServiceProvider, $controllerProv
   return issue;
 })
 .factory('MessageAPI', ['$rootScope', function($rootScope) {
-  //TODO : redo this chat - 
+  //TODO : redo this chat -
   /*
     different channel types:
       -everyone
       -username1-username2-...-usernameN
       *alphabetize the usernames
-    
+
   */
   var message = {
     //sends a message to the user

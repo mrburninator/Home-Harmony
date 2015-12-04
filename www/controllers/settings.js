@@ -8,7 +8,9 @@ define('controllers/settings.js', [], function () {
 				$scope.hasHouse = $rootScope.hasHouse;
 			}
 		);
-		
+
+
+
 		$scope.leaveHomeSubmit = function() {
         	homeAPI.leaveHome();
         }
