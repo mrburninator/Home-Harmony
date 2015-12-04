@@ -13,8 +13,8 @@
             <div class="col-xs-10 col-sm-4 col-md-4 subview">
               <form role="form" ng-submit="loginSubmit()">
                 <div class="form-group">
-                  <label for="usr">Email:</label>
-                  <input type="text" class="form-control" ng-model="usr"/>
+                  <label for="name">Username:</label>
+                  <input type="text" class="form-control" ng-model="name"/>
                 </div>
                 <div class="form-group">
                   <label for="pwd">Password:</label>
@@ -35,6 +35,10 @@
             <div class="col-xs-1 col-sm-4 col-md-4"></div>
             <div class="col-xs-10 col-sm-4 col-md-4 subview">
               <form role="form" ng-submit="registerSubmit()">
+                <div class="form-group">
+                  <label for="usr_name">Username:</label>
+                  <input type="text" class="form-control" ng-model="usr_name"/>
+                </div>
                 <div class="form-group">
                   <label for="usr_reg">Email:</label>
                   <input type="text" class="form-control" ng-model="usr_reg"/>

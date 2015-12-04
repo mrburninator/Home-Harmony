@@ -10,6 +10,18 @@
         <param name="onload" value="true" />
     </feature>
     <allow-intent href="market:*" />
+    <splash density="land-hdpi" src="res/android/splash-land-hdpi.png" />
+    <splash density="land-ldpi" src="res/android/splash-land-ldpi.png" />
+    <splash density="land-mdpi" src="res/android/splash-land-mdpi.png" />
+    <splash density="land-xhdpi" src="res/android/splash-land-xhdpi.png" />
+    <splash density="port-hdpi" src="res/android/splash-port-hdpi.png" />
+    <splash density="port-ldpi" src="res/android/splash-port-ldpi.png" />
+    <splash density="port-mdpi" src="res/android/splash-port-mdpi.png" />
+    <splash density="port-xhdpi" src="res/android/splash-port-xhdpi.png" />
+    <icon density="ldpi" src="res/android/ldpi.png" />
+    <icon density="mdpi" src="res/android/mdpi.png" />
+    <icon density="hdpi" src="res/android/hdpi.png" />
+    <icon density="xhdpi" src="res/android/xhdpi.png" />
     <name>HomeHarmony</name>
     <description>
         Home Harmony app for UCSE CSE 210.

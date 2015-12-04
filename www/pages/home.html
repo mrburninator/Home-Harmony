@@ -9,7 +9,13 @@
             <span class="panel-title">Create A New Home</span>
           </div>
           <div class="panel-body">
-              *Form Goes Here*
+              <form role="form" ng-submit="createHomeSubmit()">
+                <div class="form-group">
+                  <label for="home_name">Home Name:</label>
+                  <input type="text" class="form-control" ng-model="home_name"/>
+                </div>
+                <button type="submit" class="btn btn-default toggle_view">Create!</button>
+              </form>
           </div>
         </div>
       </div>
@@ -20,10 +26,16 @@
             <span class="panel-title">Join an Existing Home</span>
           </div>
           <div class="panel-body">
-              *Form Goes Here*
+              <form role="form" ng-submit="joinHomeSubmit()">
+                <div class="form-group">
+                  <label for="home_id">Home Name:</label>
+                  <input type="text" class="form-control" ng-model="home_id"/>
+                </div>
+                <button type="submit" class="btn btn-default toggle_view">Join!</button>
+              </form>
           </div>
         </div>
       </div>
     </div>
   </div>
-<view>
+</view>

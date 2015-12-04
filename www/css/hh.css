@@ -14,6 +14,15 @@ body,html, #hh, #root, #root > div, #root > div > div {
 body {
     background:#f2f2f2;
 }
+.enable {
+  color:green;
+  font-weight:bold;
+}
+
+.disable {
+    color:grey;
+    
+}
 
 .subview {
     padding:15px;
@@ -86,3 +95,37 @@ textarea {
     resize:none;
 }
 
+h1 {
+  margin-top:0px;
+  margin-bottom:15px;
+}
+
+.bold {
+  font-weight: bold !important;
+}
+
+/* style for the messages */
+.messageList li > div{
+  float: left;
+}
+.messageList li.mine > div{
+  float: right;
+}
+.messageList li > div:last-child{
+  margin:5px 0 0 16px;
+  background: #BDBEC2;
+  color: #fff;
+  padding:10px 15px;
+  border-radius: 15px;
+}
+.messageList li.mine > div:last-child{
+  background: #007aff;
+  margin:5px 16px 0 0;
+}
+.messageList li {
+  clear: both;
+  overflow: auto;
+}
+.messageList li img {
+  height: 32px;
+}
