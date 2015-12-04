@@ -11,7 +11,6 @@ Rootscope variables: ($rootScope)
 
     isLoggedIn:
     currentUserEmail:
-    currentUserID: -- GET RID OF THIS
     currentPass:
     currentHouseID:
     currentHouseName:
@@ -190,13 +189,11 @@ app.config(function($routeProvider, localStorageServiceProvider, $controllerProv
   return issue;
 })
 .factory('MessageAPI', ['$rootScope', function($rootScope) {
-  //TODO : redo this chat -
   /*
     different channel types:
       -everyone
       -username1-username2-...-usernameN
       *alphabetize the usernames
-
   */
   var message = {
     //sends a message to the user
@@ -252,6 +249,7 @@ app.config(function($routeProvider, localStorageServiceProvider, $controllerProv
 
   localStorageService.set('user',$rootScope.user)
   $rootScope.hasHouse = localStorageService.get('hasHouse') == null ? false : localStorageService.get('hasHouse');
+
 
   //handle logging out - triggers a watch event
   $scope.logoutSubmit = function() {

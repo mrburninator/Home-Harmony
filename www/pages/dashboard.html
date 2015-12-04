@@ -1,8 +1,7 @@
 <div class="text-center">
-  <h1>Dashboard Page</h1>
   
   <view class="padded" id="dashboard">
-    
+    <h1>Dashboard</h1>
     <style>
       .panel-body.animated{
         max-height: 300px;
@@ -19,9 +18,9 @@
           </div>
           <div class="panel-body animated">
             <ul class="list-group">
-              <li ng-repeat="data in messages.everyone" class="list-group-item">
-                Message : {{data.message}}
-                User : {{data.name}}
+              <li ng-repeat="message in messages.everyone" class="list-group-item">
+                Message : {{message.message}}
+                User : {{message.name}}
               </li>
             </ul>
           </div>
@@ -34,7 +33,25 @@
             <span class="glyphicon glyphicon-collapse-down"></span>
           </div>
           <div class="panel-body animated">
-              *Issue list goes here*
+              <ul class="list-group">
+              <li ng-repeat="issue in issues" class="list-group-item"> 
+                <div>
+                  Name : {{issue.Name}}
+                </div>              
+                <div>
+                  AssignedBy : {{issue.AssignedBy}}
+                </div>
+                <div>
+                  Done : {{issue.Done}}
+                </div>               
+                <div>
+                  Assigned To : {{issue.AssignedTo.name}}
+                </div>                
+                <div>
+                Repeat:  {{issue.Repeat}}
+                </div>
+              </li>
+            </ul>
           </div>
         </div>
       </div>

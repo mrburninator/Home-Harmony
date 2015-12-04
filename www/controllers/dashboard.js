@@ -1,7 +1,6 @@
 define('controllers/dashboard.js', [], function () {
   return function controller(cp) {
     cp.register('dashboardController', ['$scope', '$rootScope', '$firebaseArray', function($scope, $rootScope, $firebaseArray) {
-
       //remove
       console.log('RootScope Status:', $rootScope);
 
@@ -18,12 +17,17 @@ define('controllers/dashboard.js', [], function () {
         }
       });
 
-      //TODO : start
-
-      //load the issue list
-      var issues = new Firebase( firebaseURL + "/issues" );
-      $scope.issues = $firebaseArray(issues);
-
+      //TODO : start issue list
+      $rootScope.fireDB.child('houses').child($rootScope.user.house).child('issues').on("value", function (issues){
+        $scope.issues = [];
+        var iss = issues.val();
+        //TODO : preprocessing of messages can be done here (add user image, ect)
+        for (var key in iss) {
+          $scope.issues.push(iss[key]);
+        }
+      });
+      $scope.hasHouse = $rootScope.hasHouse;
+      $scope.user = $rootScope.user;
     }]);
   }
 });
