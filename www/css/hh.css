@@ -99,3 +99,7 @@ h1 {
   margin-top:0px;
   margin-bottom:15px;
 }
+
+.bold {
+  font-weight: bold !important;
+}
