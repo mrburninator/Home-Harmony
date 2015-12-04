@@ -8,8 +8,32 @@
           <div class="panel-heading">
             <span class="panel-title"><h3>Add Issue</h3></span>
             <form ng-submit="addIssue()">
-              <div class="form-group">
-                <textarea ng-model="newIssueText" placeholder="add your issue" class="form-control" rows="5"></textarea>
+                
+                <!-- IssueText Area-->
+                <textarea ng-model="newIssueText" placeholder="add your issue" class="form-control" rows="3"></textarea>
+                
+                <!-- Repeat or Not -->
+                <div class="checkbox">
+                   <label><input type="checkbox" ng-model="Repeat">Repeat</label>
+                </div>
+                          
+                <!-- dropdown list to choose roommate -->
+                <div class="dropdown">
+                <!-- do not use <div data-ng-controller="issueController">
+                   will cause trouble -->
+                  <div>
+                    Current assign to {{choosenroommate.name}}  
+                    <!-- id {{choosenroommate.$id}} -->
+                    </br> 
+                    <!--  full info is {{choosenroommate}} -->
+                    <div>
+                        Assign to? :
+                        <select data-ng-model="choosenroommate"
+                                data-ng-options="act.$id for act in roommatelist">                
+                        </select>
+                   </div>
+                 </div>
+
               </div>
               <button type="submit" class="btn btn-default">Submit</button>
               <div>TODO : need to select a user type here</div>
@@ -22,27 +46,31 @@
         <div class="panel panel-default">
           <div class="panel-heading">
             <span class="panel-title"><h3>Issue List</h3></span>
+            <button ng-click="filterToggle()">{{DisplayMode}}</button>
           </div>
           <div class="panel-body">
+            
             <ul class="list-group">
-              <li ng-repeat="data in issues" class="list-group-item"> 
-                <div>
+              <li ng-repeat="data in issues" class="list-group-item" ng-if="issueFilter(data,toggleFlag)"> 
+                
                   <div>
-                    Text : {{data.text}}
+
+                    Name : {{data.Name}}
+                  </div>              
+                  <div>
+                    AssignedBy : {{data.AssignedBy}}
                   </div>
                   <div>
-                    Date Added : ?
-                  </div>
+                    Done : {{data.Done}}
+                  </div>               
                   <div>
-                    Checkbox - isChecked : ?
+                    Assigned To : {{data.AssignedTo.name}}
+                  </div>                
+                  <div>
+                  Repeat:  {{data.Repeat}}
                   </div>
-                </div>
-                <div>
-                  Creator : {{data.creater}}
-                </div>
-                <div>
-                  Directed Towards : ?
-                </div>
+                  
+
               </li>
             </ul>
           </div>
