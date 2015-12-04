@@ -14,6 +14,15 @@ body,html, #hh, #root, #root > div, #root > div > div {
 body {
     background:#f2f2f2;
 }
+.enable {
+  color:green;
+  font-weight:bold;
+}
+
+.disable {
+    color:grey;
+    
+}
 
 .subview {
     padding:15px;
