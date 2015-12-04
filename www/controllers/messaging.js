@@ -1,6 +1,7 @@
 define('controllers/messaging.js', [], function () {
   return function controller(cp) {
     cp.register('messagingController', ['$scope', '$rootScope', 'MessageAPI', '$firebaseArray', function($scope, $rootScope, MessageAPI, $firebaseArray) {
+      $scope.user = $rootScope.user;
       //start with empty messages
       $scope.messages = {};
       $scope.messages.everyone = [];
@@ -15,8 +16,12 @@ define('controllers/messaging.js', [], function () {
           var msgs = messages.val();
           //TODO : preprocessing of messages can be done here (add user image, ect)
           for (var key in msgs) {
+            if(msgs[key].name == $rootScope.user.username) {
+              msgs[key].mine = true;
+            }
             $scope.messages.everyone.push(msgs[key]);
           }
+          // $scope.$apply();
         });
         //TODO : future work - other, private message, chats
       });

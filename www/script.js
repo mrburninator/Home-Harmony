@@ -73,28 +73,29 @@ app.config(function($routeProvider, localStorageServiceProvider, $controllerProv
 .factory('userAPI', ['$rootScope', function($rootScope) {
   var user = {
     login: function(name, password, fireDB, callback) {
-
+        //make it lowercase
+        name = name.toLowerCase();
         //Check whether user already exists & username/password match
         $rootScope.fireDB.child('users').child(name).once("value", function (user){
           var userObj = user.val();
-          //TODO : make this case insensitive
+          //make this case insensitive
           if (user.exists() &&  userObj.username.toUpperCase() == name.toUpperCase() &&  userObj.password == password){
-            console.log('Login for username:', userObj.username, ' success!');
-            //TODO : check if the user has a house
             callback();
           } else {
-            console.log('Login for username:', name, ' failed.');
+            BootstrapDialog.alert('Invalid Username/Password Combination');
           }
         });
 
     },
 
     register: function(username ,email, password, fireDB, callback) {
-      //TODO : check if email exists in /users
+      //make it lowercase
+      username = username.toLowerCase();
+      //check if email exists in /users
       $rootScope.fireDB.child('users').child(username).once("value", function(snapshot){
           if(snapshot.exists()){
             //FAIL
-            console.log('Registration for user:', username, 'failed.\n');
+            BootstrapDialog.alert('Cannot create an account for this username/email combination');
           } else {
             var user = {}
             user.email = email;
@@ -127,14 +128,11 @@ app.config(function($routeProvider, localStorageServiceProvider, $controllerProv
         "name": homeName
       };
       $rootScope.currentHomeID = $rootScope.fireDB.child('houses').child(homeName).set(house);
-
+      //join a home after creation
+      //TODO : is this a race condition?
+      this.joinHome(homeName);
     },
     joinHome : function(homeID){
-      //TODO : given a home id, add a user to the users child
-
-      //remove
-      console.log('RootScope contents:', $rootScope.user);
-
       var tempUser = {};
       tempUser.name = $rootScope.user.username;
 
@@ -142,8 +140,6 @@ app.config(function($routeProvider, localStorageServiceProvider, $controllerProv
       $rootScope.fireDB.child('houses').child(homeID).once("value", function(snapshot){
           //make sure the house exists before trying to join it
           if(snapshot.exists()){
-            console.log('The house', homeID, 'exists!!!');
-
             //Update rootScope
             $rootScope.hasHouse = true;
             $rootScope.user.house = homeID;

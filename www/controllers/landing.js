@@ -35,33 +35,34 @@ define('controllers/landing.js', [], function () {
         $scope.loading = true;
         var username = this.name;
         var password = this.pwd;
+        if(username && password) {
+          userAPI.login(username, this.pwd, $scope.fireDB, function(auth){
+            $scope.user.isLoggedIn = true;
 
-        userAPI.login(username, this.pwd, $scope.fireDB, function(auth){
-          // console.log(auth);
-          $scope.user.isLoggedIn = true;
-
-          $rootScope.user = {};
-          $rootScope.user.isLoggedIn = true;
-          $rootScope.user.username = username;
-          $rootScope.user.password = password;
+            $rootScope.user = {};
+            $rootScope.user.isLoggedIn = true;
+            $rootScope.user.username = username.toLowerCase();
+            $rootScope.user.password = password;
 
 
-          $rootScope.fireDB.child('users').child($rootScope.user.username).child('houses').once('value',function(data){
-            //TODO : check exists
-            var houses = data.val();
-            $rootScope.hasHouse = houses ? true : false;
-            $scope.hasHouse = $rootScope.hasHouse;
+            $rootScope.fireDB.child('users').child($rootScope.user.username).child('houses').once('value',function(data){
+              var houses = data.val();
+              $rootScope.hasHouse = houses ? true : false;
+              $scope.hasHouse = $rootScope.hasHouse;
 
-            if($scope.hasHouse) {
-              $rootScope.user.house = houses;
-              //if true, go to dashboard.  else go to home page
-              $location.path('dashboard');
-            } else {
-              $location.path('home');
-            }
-            $scope.$apply();
+              if($scope.hasHouse) {
+                $rootScope.user.house = houses;
+                //if true, go to dashboard.  else go to home page
+                $location.path('dashboard');
+              } else {
+                $location.path('home');
+              }
+              $scope.$apply();
+            });
           });
-        });
+        } else {
+          BootstrapDialog.alert('Username/Password cannot be blank');
+        }
       };
 
       //TODO : implement register submit logic
@@ -69,7 +70,7 @@ define('controllers/landing.js', [], function () {
         //TODO : requires register service
         if(this.usr_reg && this.pwd_reg) {
           $scope.loading = true;
-          username = this.usr_name;
+          username = this.usr_name.toLowerCase();
           email = this.usr_reg;
           password = this.pwd_reg;
           //TODO : see if register already exists in /users - fail if it does.
@@ -85,6 +86,7 @@ define('controllers/landing.js', [], function () {
           });
         } else {
           console.log('it didnt pass!!!');
+          BootstrapDialog.alert('Username or Password cannot be blank');
         }
       };
       //toggle between login and register views on click

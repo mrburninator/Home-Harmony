@@ -14,7 +14,7 @@ define('controllers/shoppinglist.js', [], function () {
             $scope.list.push(itm[key]);
           }
           console.log('list:',$scope.list);
-          $scope.$apply();
+          // $scope.$apply();
         });
 
       $scope.addItem = function() {
@@ -36,6 +36,7 @@ define('controllers/shoppinglist.js', [], function () {
         delete item['$$hashKey'];
         $rootScope.fireDB.child('houses').child($rootScope.user.house).child('shoppinglist').child(item.addedBy + item.name).set(item);
         console.log("item purchased by:", item.purchasedBy);
+        BootstrapDialog.alert('X' + item.quantity + ' ' + item.name + 'Purchased!');
       };
 
     }]);

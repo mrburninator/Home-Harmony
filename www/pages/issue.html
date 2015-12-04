@@ -6,7 +6,9 @@
       <div class="col-sm-12 col-md-4">
         <div class="panel panel-default">
           <div class="panel-heading">
-            <span class="panel-title"><h3>Add Issue</h3></span>
+            <span class="panel-title"><h4>Add Issue</h4></span>
+          </div>
+          <div class="panel-body">
             <form ng-submit="addIssue()">
 
                 <!-- IssueText Area-->
@@ -36,10 +38,8 @@
       <div class="col-sm-12 col-md-8">
         <div class="panel panel-default">
           <div class="panel-heading">
-            <span class="panel-title"><h3>Issue List</h3></span>
-            <button ng-click="filterToggle();"> <span ng-class="toggleFlag ? 'enable' : 'disable'"> Show all</span> </button>
-            <button ng-click="filterToggle(); "> <span ng-class="toggleFlag ? 'disable' : 'enable'"> Show mine </span> </button>
-            
+            <span class="panel-title"><h4>Issue List</h4></span>
+            <button ng-click="filterToggle()">{{DisplayMode}}</button>
           </div>
           <div class="panel-body">
 
