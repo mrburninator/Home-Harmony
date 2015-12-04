@@ -46,7 +46,9 @@
         <div class="panel panel-default">
           <div class="panel-heading">
             <span class="panel-title"><h3>Issue List</h3></span>
-            <button ng-click="filterToggle()">{{DisplayMode}}</button>
+            <button ng-click="filterToggle(); myStyle = {color:'green';font-weight:'bold';};  allStyle={color:'grey'};" > <span ng-style="myStyle" style="color:green; font-weight:bold;" > Show mine</span> </button>
+            <button ng-click="filterToggle(); allStyle= {color:'green';font-weight:'bold';};  myStyle={color:'grey'}; "> <span ng-style="allStyle "> Show all </span> </button>
+            
           </div>
           <div class="panel-body">
 
