@@ -36,7 +36,7 @@ define('controllers/issue.js', [], function () {
             console.log("AssignedToName" , $scope.choosenroommate);
             $scope.issues.$add({
                 Name: $scope.newIssueText ,
-                Done: "false" ,
+                Done: false ,
                 AssignedBy: $rootScope.user.username,
                 AssignedTo : $scope.choosenroommate ,
                 Repeat: $scope.Repeat
@@ -68,6 +68,22 @@ define('controllers/issue.js', [], function () {
             } else {
                $scope.DisplayMode =  "Only Show my issues";
             }
+        };
+        
+        
+        $scope.showDone = function(data) {
+          //console.log("in showDOne: username is ", $rootScope.user.username, "assign to",data.AssignedTo.name, "data", data);   
+          if ($rootScope.user.username == data.AssignedTo.name && data.Done==false) {
+              return true;
+          }
+              return false;
+        };
+        
+        
+        $scope.markDone = function (issue) {
+          $scope.issues.$remove(issue);
+          issue.Done = true;
+          $scope.issues.$add(issue);
         };
         
         
