@@ -16,7 +16,6 @@ Rootscope variables: ($rootScope)
     currentHouseName:
   }
 
-
 */
 //configure requirejs
 requirejs.config({
@@ -78,7 +77,8 @@ app.config(function($routeProvider, localStorageServiceProvider, $controllerProv
         //Check whether user already exists & username/password match
         $rootScope.fireDB.child('users').child(name).once("value", function (user){
           var userObj = user.val();
-          if (user.exists() &&  userObj.username == name &&  userObj.password == password){
+          //TODO : make this case insensitive
+          if (user.exists() &&  userObj.username.toUpperCase() == name.toUpperCase() &&  userObj.password == password){
             console.log('Login for username:', userObj.username, ' success!');
             //TODO : check if the user has a house
             callback();

@@ -62,7 +62,16 @@
             <span class="glyphicon glyphicon-collapse-down"></span>
           </div>
           <div class="panel-body animated">
-              *Shopping list info goes here*
+            <ul class="list-group">
+              <li ng-repeat="data in list" class="list-group-item">
+                Name : {{data.name}}
+                Quantity : {{data.quantity}}
+                <div ng-if="data.purchasedBy.length > 0">Purchased by: {{data.purchasedBy}}</div>
+                <form ng-if="data.isPurchased==false" ng-submit="mark(data)">
+                  <button type="submit" class="btn btn-default">Purchased</button>
+                </form>
+              </li>
+            </ul>
           </div>
         </div>
       </div>
