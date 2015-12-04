@@ -7,6 +7,8 @@
         <form ng-submit="addItem()">
           <span class="panel-title"><h4>New Item</h4></span>
           Name: <input ng-model="itemName" type="text" name="FirstName"><br>
+          <br>
+          Quantity: <input ng-model="quantity" type="text" name="FirstName"><br>
           <button type="submit" class="btn btn-default">Add Item</button>
         </form>
       </div>
@@ -17,7 +19,12 @@
           <span class="panel-title">Shopping List</span>
       </div>
       <div class="panel-body">
-          *List of Shopping Lists Goes Here*
+          <ul class="list-group">
+            <li ng-repeat="data in list" class="list-group-item">
+              Name : {{data.name}}
+              Quantity : {{data.quantity}}
+            </li>
+          </ul>
       </div>
     </div>
 
