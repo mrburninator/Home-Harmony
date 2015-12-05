@@ -1,18 +1,19 @@
 body { padding-top: 50px; }
 
 view {
-    display:block;
-    width:100%;
-    height:100%;
-    overflow:scroll;
+  display:block;
+  width:100%;
+  height:100%;
+  overflow:scroll;
+  -webkit-overflow-scrolling: touch;
 }
 
 body,html, #hh, #root, #root > div, #root > div > div {
-    height:100%;
-    width:100%;
+  height:100%;
+  width:100%;
 }
 body {
-    background:#f2f2f2;
+  background:#f2f2f2;
 }
 .enable {
   color:green;
@@ -20,31 +21,30 @@ body {
 }
 
 .disable {
-    color:grey;
-    
+  color:grey;
 }
 
 .subview {
-    padding:15px;
-    background:rgba(255,255,255,1);
-    border-radius: 15px;
-    margin-top:15px;
-    border:1px solid #ddd;    
-    -webkit-box-shadow: rgba(255, 255, 255, 0.6) 0px 5px 0px 0px inset, rgba(0, 0, 0, 0.2) 0px 3px 7px 0px;
+  padding:15px;
+  background:rgba(255,255,255,1);
+  border-radius: 15px;
+  margin-top:15px;
+  border:1px solid #ddd;    
+  -webkit-box-shadow: rgba(255, 255, 255, 0.6) 0px 5px 0px 0px inset, rgba(0, 0, 0, 0.2) 0px 3px 7px 0px;
 }
 
 .padded {
-    padding:15px;
+  padding:15px;
 }
 
 .animated {
-    transition-duration: 500;
+  transition-duration: 500;
 }
 
 .untoggled > .panel-body {
-    height:0;
-    padding:0;
-    overflow:hidden;
+  height:0;
+  padding:0;
+  overflow:hidden;
 }
 
 /*
@@ -56,8 +56,8 @@ body {
 }
 
 .view-animate {
-    transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) .5s;
-    width:100%;
+  transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) .5s;
+  width:100%;
 }
 
 .view-animate.ng-enter, .view-animate.ng-leave {
@@ -120,12 +120,16 @@ h1 {
 }
 .messageList li.mine > div:last-child{
   background: #007aff;
-  margin:5px 16px 0 0;
+  margin:8px 16px 0 0;
 }
 .messageList li {
   clear: both;
   overflow: auto;
 }
 .messageList li img {
-  height: 32px;
+  height: 36px;
+  border-radius: 18px;
+  border:2px solid #ccc;
+  min-height:36px;
+  min-width:36px;
 }

@@ -16,6 +16,23 @@
         </div>
       </div>
 
+      <div class="col-sm-6 col-md-4" ng-hide="hasHouse==false">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <span class="panel-title"><h4>Change Password</h4></span>
+          </div>
+          <div class="panel-body">
+            <form ng-submit="setPasswordSubmit()">
+              <div class="form-group">
+                  <label for="new_password">New Password:</label>
+                  <input type="password" class="form-control" ng-model="new_password"/>
+                </div>
+              <button type="submit" class="btn btn-default">Change</button>
+            </form>
+          </div>
+        </div>
+      </div>
+
     </div>
 
   </div>

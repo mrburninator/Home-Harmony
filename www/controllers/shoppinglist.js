@@ -9,17 +9,18 @@ define('controllers/shoppinglist.js', [], function () {
       $scope.isEmpty.shoppinglist = false;
 
       //Populate the List
-        $rootScope.fireDB.child('houses').child($rootScope.user.house).child('shoppinglist').on("value", function (items){
-          $scope.list = [];
-          var itm = items.val();
-          //TODO : preprocessing of items can be done here (add user image, ect)
-          for (var key in itm) {
-            $scope.list.push(itm[key]);
-          }
-          console.log('list:',$scope.list);
-          $scope.isEmpty.shoppinglist = $scope.list.length > 0 ? false : true;
-          // $scope.$apply();
-        });
+      $rootScope.fireDB.child('houses').child($rootScope.user.house).child('shoppinglist').on("value", function (items){
+        $scope.list = [];
+        var itm = items.val();
+        //TODO : preprocessing of items can be done here (add user image, ect)
+        for (var key in itm) {
+          $scope.list.push(itm[key]);
+        }
+        console.log('list:',$scope.list);
+        $scope.isEmpty.shoppinglist = $scope.list.length > 0 ? false : true;
+        //safely apply changes to scope
+        if(!$scope.$$phase) { $scope.$apply(); }
+      });
 
       $scope.addItem = function() {
         var item = {}

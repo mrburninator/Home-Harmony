@@ -2,9 +2,20 @@
     <view id="loginView">
       <h2>Login</h2>
       <style>
+      .row {
+        margin-right:0;
+        margin-left:-5px;
+      }
       .form-group {
         margin:0 auto  15px auto;
         max-width:300px;
+      }
+      .toggle_view {
+        cursor: pointer;
+      }
+      .line {
+        border-top:1px solid #ccc;
+        width:100%;
       }
       </style>
       <div>
@@ -21,8 +32,11 @@
                   <input type="password" class="form-control" ng-model="pwd"/>
                 </div>
                 <button type="submit" class="btn btn-default">Log In</button>
-                <br/><br/>
-                <button type="button" class="btn btn-default toggle_view">Create Account</button>
+                <br/><br/><div class="line"></div><br/>
+                <div class="toggle_view" value="register">Don't have an account? <a>Create Account</a></div>
+                     <br/><div class="line"></div><br/>
+                <div class="toggle_view" value="reset">Forgot your password? <a>Reset Password</a></div>
+                <br/>
               </form>
             </div>
           </div>
@@ -48,8 +62,29 @@
                   <input type="password" class="form-control" ng-model="pwd_reg"/>
                 </div>
                 <button type="submit" class="btn btn-default">Create Account</button>
-                <br/><br/>
-                <button type="button" class="btn btn-default toggle_view">Log In</button>
+                <br/><br/><div class="line"></div><br/>
+                <div class="toggle_view" value="login">Already have an account? <a>Login</a></div>
+                <br/>
+              </form>
+            </div>
+          </div>
+      </div>
+    </view>
+    <view  id="resetView" class="hidden">
+      <h2>Reset Password</h2>
+      <div>
+          <div class="row">
+            <div class="col-xs-1 col-sm-4 col-md-4"></div>
+            <div class="col-xs-10 col-sm-4 col-md-4 subview">
+              <form role="form" ng-submit="resetPasswordSubmit()">
+                <div class="form-group">
+                  <label for="email_reset">Email:</label>
+                  <input type="text" class="form-control" ng-model="email_reset"/>
+                </div>
+                <button type="submit" class="btn btn-default">Reset Password</button>
+                <br/><br/><div class="line"></div><br/>
+                <div class="toggle_view" value="login">Remember your password? <a>Login</a></div>
+                <br/>
               </form>
             </div>
           </div>

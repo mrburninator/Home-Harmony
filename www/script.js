@@ -8,12 +8,8 @@ Rootscope variables: ($rootScope)
     email: (FU)
     password:
     house:
-
+    image:
     isLoggedIn:
-    currentUserEmail:
-    currentPass:
-    currentHouseID:
-    currentHouseName:
   }
 
 
@@ -74,46 +70,82 @@ app.config(function($routeProvider, localStorageServiceProvider, $controllerProv
 //define the services to be used by controllers
 .factory('userAPI', ['$rootScope', function($rootScope) {
   var user = {
+    //login - both with user schema and firebase
     login: function(name, password, fireDB, callback) {
-        //make it lowercase
+        //Make it lowercase so login is case insensitive
         name = name.toLowerCase();
-        //Check whether user already exists & username/password match
+        //Check whether user exists
         $rootScope.fireDB.child('users').child(name).once("value", function (user){
           var userObj = user.val();
-          //make this case insensitive
-          if (user.exists() &&  userObj.username.toUpperCase() == name.toUpperCase() &&  userObj.password == password){
-            callback();
+          if (user.exists()){
+            //login so we can grab the user's image
+            $rootScope.fireDB.authWithPassword({
+              email    : userObj.email,
+              password : password
+            }, function(error, authData){
+              if (error) {
+                BootstrapDialog.alert('Could not login with username/password');
+              } else {
+                console.log('authData : ', authData);
+                //save login info on success
+                $rootScope.user = {};
+                $rootScope.user.isLoggedIn = true;
+                $rootScope.user.username = name;
+                $rootScope.user.password = password;
+                $rootScope.user.email = authData.password.email;
+                $rootScope.user.image = authData.password.profileImageURL;
+                //check if user has joined a house
+                $rootScope.fireDB.child('users').child($rootScope.user.username).child('houses').once('value',function(data){
+                  var houses = data.val();
+                  $rootScope.user.house = houses;
+                  $rootScope.hasHouse = houses ? true : false;
+                  //success callback
+                  callback();
+                });
+              }
+            });
           } else {
-            BootstrapDialog.alert('Invalid Username/Password Combination');
+            BootstrapDialog.alert('Invalid Username');
           }
         });
-
     },
-
-    register: function(username ,email, password, fireDB, callback) {
+    //register - both with user schema and firebase
+    register: function(username, email, password, fireDB, callback) {
       //make it lowercase
       username = username.toLowerCase();
       //check if email exists in /users
       $rootScope.fireDB.child('users').child(username).once("value", function(snapshot){
           if(snapshot.exists()){
-            //FAIL
-            BootstrapDialog.alert('Cannot create an account for this username/email combination');
+            BootstrapDialog.alert('Cannot create an account for this username');
           } else {
-            var user = {}
-            user.email = email;
-            user.username = username;
-            user.password = password;
-            user.houses = [];
-
-            //Create a new child and store the reference
-            var userID = fireDB.child('users').child(user.username).set(user);
-
-            //remove
-            console.log('Registration for user:', username, 'succesful.\n');
-            //Finish registration and callback
-            callback();
-              // }
-            // });
+            //create account using firebase
+            fireDB.createUser({
+              email: email,
+              password: password
+            }, function(error, userData){
+              if (error) {
+                switch (error.code) {
+                  case "EMAIL_TAKEN":
+                    BootstrapDialog.alert('Cannot create an account for this email');
+                    break;
+                  case "INVALID_EMAIL":
+                    BootstrapDialog.alert('Please enter a valid email');
+                    break;
+                  default:
+                    BootstrapDialog.alert('Could not create an account at this time');
+                }
+              } else {
+                var user = {}
+                user.email = email;
+                user.username = username;
+                user.password = password;
+                user.houses = [];
+                //Create a new child and store the reference
+                var userID = fireDB.child('users').child(user.username).set(user);
+                //Finish registration and callback
+                callback();
+              }
+            });
           }
       });
     }
@@ -137,6 +169,7 @@ app.config(function($routeProvider, localStorageServiceProvider, $controllerProv
     joinHome : function(homeID){
       var tempUser = {};
       tempUser.name = $rootScope.user.username;
+      tempUser.image = $rootScope.user.image ? $rootScope.user.image : "assets/default_user.png"; //user gravatar image, default on null
 
       //Check whether a house exists
       $rootScope.fireDB.child('houses').child(homeID).once("value", function(snapshot){
@@ -156,8 +189,8 @@ app.config(function($routeProvider, localStorageServiceProvider, $controllerProv
             $location.path('dashboard');
             $rootScope.$apply();
           } else {
-            //TODO : dialog window that alerts the user the house does not exist
-            console.log('The house', homeID, 'does not exist!!!');
+            //case where home name does not exist
+            BootstrapDialog.alert('Sorry, this home does not exist');
           }
         }, function(){ console.log("error!"); }
       );

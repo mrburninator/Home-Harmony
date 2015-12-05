@@ -17,15 +17,21 @@ define('controllers/messaging.js', [], function () {
         $rootScope.fireDB.child('houses').child($rootScope.user.house).child('messages').child('everyone').on("value", function (messages){
           $scope.messages.everyone = [];
           var msgs = messages.val();
-          //TODO : preprocessing of messages can be done here (add user image, ect)
+          //preprocessing messages : add user image.
           for (var key in msgs) {
             if(msgs[key].name == $rootScope.user.username) {
               msgs[key].mine = true;
             }
+            //grab the image for the user that sent the message
+            var from = msgs[key].name;
+            var image = ($scope.users[from] && $scope.users[from].image) ? $scope.users[from].image : "assets/default_user.png";
+            msgs[key].image = image;
+            //add the message to the array
             $scope.messages.everyone.push(msgs[key]);
           }
           $scope.isEmpty.messages = $scope.messages.everyone.length > 0 ? false : true;
-          // $scope.$apply();
+          //safely apply changes to scope
+          if(!$scope.$$phase) { $scope.$apply(); }
         });
         //TODO : future work - other, private message, chats
       });

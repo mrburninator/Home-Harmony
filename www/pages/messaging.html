@@ -7,7 +7,7 @@
             <li class="list-group-item" ng-if="isEmpty.messages==true">No Messages Received</li>
             <li ng-repeat-start="data in messages.everyone" class="list-group-item" ng-class="{mine : data.mine}">
               <div>
-                <img src="assets/default_user.png"/>
+                <img ng-src="{{data.image}}"/>
                 <div>{{data.name}}</div>
               </div>
               <div>{{data.message}}</div>
