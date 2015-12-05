@@ -45,7 +45,10 @@ define('controllers/dashboard.js', [], function () {
         var iss = issues.val();
         //TODO : preprocessing of messages can be done here (add user image, ect)
         for (var key in iss) {
-          $scope.issues.push(iss[key]);
+          //only show unresolved issues on dashboard
+          if(iss[key].Done) {
+            $scope.issues.push(iss[key]);
+          }
         }
         $scope.isEmpty.issues = $scope.issues.length > 0 ? false : true;
         //safely apply changes to scope
@@ -61,9 +64,11 @@ define('controllers/dashboard.js', [], function () {
       $rootScope.fireDB.child('houses').child($rootScope.user.house).child('shoppinglist').on("value", function (items){
         $scope.list = [];
         var itm = items.val();
-        //TODO : preprocessing of items can be done here (add user image, ect)
         for (var key in itm) {
-          $scope.list.push(itm[key]);
+          //only show items on dashboard that havn't been bought
+          if(!itm[key].purchasedBy) {
+            $scope.list.push(itm[key]);
+          }
         }
         $scope.isEmpty.shoppinglist = $scope.list.length > 0 ? false : true;
         //safely apply changes to scope

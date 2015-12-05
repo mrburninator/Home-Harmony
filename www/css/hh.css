@@ -1,4 +1,4 @@
-body { padding-top: 50px; }
+body { padding-top: 60px; }
 
 view {
   display:block;
@@ -28,7 +28,6 @@ body {
   padding:15px;
   background:rgba(255,255,255,1);
   border-radius: 15px;
-  margin-top:15px;
   border:1px solid #ddd;    
   -webkit-box-shadow: rgba(255, 255, 255, 0.6) 0px 5px 0px 0px inset, rgba(0, 0, 0, 0.2) 0px 3px 7px 0px;
 }
@@ -95,6 +94,10 @@ textarea {
     resize:none;
 }
 
+h4 {
+  color:rgb(102, 101, 89);
+}
+
 h1 {
   margin-top:0px;
   margin-bottom:15px;
@@ -119,7 +122,8 @@ h1 {
   border-radius: 15px;
 }
 .messageList li.mine > div:last-child{
-  background: #007aff;
+  /*background: #007aff;*/
+  background-color: rgb(147, 197, 75);
   margin:8px 16px 0 0;
 }
 .messageList li {
@@ -129,7 +133,10 @@ h1 {
 .messageList li img {
   height: 36px;
   border-radius: 18px;
-  border:2px solid #ccc;
+/*  border:2px solid #ccc;*/
+  border:2px solid rgb(223, 215, 202);
   min-height:36px;
   min-width:36px;
+  background-color: #f6f6f6;
+  box-shadow: 0px 0px 5px 2px rgb(223, 215, 202);
 }
