@@ -1,31 +1,43 @@
 <view class="padded">
   <div class="text-center">
     
-    <div class="panel panel-default">
-      <div class="panel-body">
-          <ul class="list-group messageList">
-            <li class="list-group-item" ng-if="isEmpty.messages==true">No Messages Received</li>
-            <li ng-repeat-start="data in messages.everyone" class="list-group-item" ng-class="{mine : data.mine}">
-              <div>
-                <img ng-src="{{data.image}}"/>
-                <div>{{data.name}}</div>
-              </div>
-              <div>{{data.message}}</div>
-            </li>
-            <div ng-repeat-end></div>
-          </ul>
-      </div>
-    </div>
+    <div class="row">
 
-    <div>
-      <form role="form" ng-submit="addMessageSubmit()">
-        <div class="form-group">
-        <div class="form-group">
-          <input id="msg" type="text" class="form-control" ng-model="msg"/>
+      <div class="col-sm-12 col-md-8">
+
+        <div class="panel panel-default">
+          <div class="panel-body">
+              <ul class="list-group messageList">
+                <li class="list-group-item" ng-if="isEmpty.messages==true">No Messages Received</li>
+                <li ng-repeat-start="data in messages.everyone" class="list-group-item" ng-class="{mine : data.mine}">
+                  <div>
+                    <img ng-src="{{data.image}}"/>
+                    <div>{{data.name}}</div>
+                  </div>
+                  <div>{{data.message}}</div>
+                </li>
+                <div ng-repeat-end></div>
+              </ul>
+          </div>
         </div>
-        <button type="submit" class="btn btn-default">Send</button>
-      </form>
-    </div>
-    
+
+      </div>
+
+      <div class="col-sm-12 col-md-4">
+
+        <div class="panel panel-default">
+          <div class="panel-body">
+            <form role="form" ng-submit="addMessageSubmit()">
+              <div class="form-group">
+              <div class="form-group">
+                <input id="msg" type="text" class="form-control" ng-model="msg"/>
+              </div>
+              <button type="submit" class="btn btn-default">Send</button>
+            </form>
+          </div>
+        </div>
+
+      </div>
+
   </div>
 </view>

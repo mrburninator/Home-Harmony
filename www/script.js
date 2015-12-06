@@ -187,7 +187,7 @@ app.config(function($routeProvider, localStorageServiceProvider, $controllerProv
 
             //TODO: Add multiple houses later.
             $location.path('dashboard');
-            $rootScope.$apply();
+            if(!$rootScope.$$phase) { $rootScope.$apply(); }
           } else {
             //case where home name does not exist
             BootstrapDialog.alert('Sorry, this home does not exist');
@@ -322,6 +322,12 @@ app.config(function($routeProvider, localStorageServiceProvider, $controllerProv
       if( $(e.target).is('a')) {
         $(this).collapse('hide');
       }
+    });
+
+    //navigation listener - latest clicked item gets assigned the clicked class
+    $('#navbar').off('click').on('click', 'li', function(){
+      $('#navbar li').removeClass('clicked');
+      $(this).addClass('clicked');
     });
 });
 

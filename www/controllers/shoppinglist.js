@@ -31,9 +31,13 @@ define('controllers/shoppinglist.js', [], function () {
         item.addedBy = $rootScope.user.username;
         item.purchasedBy = '';
         //TODO : check for blank name or quantity
-        $rootScope.fireDB.child('houses').child($rootScope.user.house).child('shoppinglist').child(item.addedBy + item.name).set(item);
-        $scope.itemName = '';
-        $scope.quantity = 1;
+        if(item.name && item.quantity) {
+          $rootScope.fireDB.child('houses').child($rootScope.user.house).child('shoppinglist').child(item.addedBy + item.name).set(item);
+          $scope.itemName = '';
+          $scope.quantity = 1;
+        } else {
+          BootstrapDialog.alert('Sorry, you cannot add an item with a blank name or quantity');
+        }
       };
 
       $scope.mark = function(item) {

@@ -6,7 +6,12 @@ view {
   height:100%;
   overflow:scroll;
   -webkit-overflow-scrolling: touch;
+  /*don't allow text selection for the most part*/
+  -webkit-user-select: none;
+  user-select: none;
 }
+
+
 
 body,html, #hh, #root, #root > div, #root > div > div {
   height:100%;
@@ -139,4 +144,42 @@ h1 {
   min-width:36px;
   background-color: #f6f6f6;
   box-shadow: 0px 0px 5px 2px rgb(223, 215, 202);
+}
+
+.shoppingList li {
+  overflow:auto;
+}
+.shoppingList .item {
+  float:left;
+  text-align: left;
+}
+.shoppingList .item span{
+  font-weight: bold;
+}
+.shoppingList .purchase {
+  float:right;
+}
+.shoppingList .checkmark {
+  height:48px;
+  width:48px;
+  padding:10px;
+  float:right;
+  border:1px solid rgb(223, 215, 202);
+  border-radius:32px;
+  /*background-color: rgb(248, 245, 240);*/
+  background-color: #f6f6f6;
+  margin-top:6px;
+}
+
+
+
+/*if touce device detected, then this class will be active*/
+.touchevents #navbar a:hover {
+  color:#98978b;
+  background-color: transparent;
+}
+
+.touchevents #navbar .clicked a {
+  color: #ffffff;
+  background-color: transparent;
 }

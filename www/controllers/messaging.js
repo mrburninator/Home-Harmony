@@ -37,9 +37,10 @@ define('controllers/messaging.js', [], function () {
       });
       //on message submit call
       $scope.addMessageSubmit = function() {
-        console.log('message sent!');
-        MessageAPI.sendMessage("everyone", this.msg);
-        $('#msg').val('');
+        if(this.msg) {
+          MessageAPI.sendMessage("everyone", this.msg);
+          $('#msg').val('');
+        }
       }
     }]);
   }
