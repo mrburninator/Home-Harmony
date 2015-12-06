@@ -44,28 +44,33 @@
       <div class="col-xs-12 col-sm-6 col-md-6">
         <div class="panel panel-success">
           <div class="panel-heading">
-            <span class="panel-title">House Issues</span>
+            <span class="panel-title">Issues Assigned to Me</span>
             <span class="glyphicon glyphicon-collapse-down"></span>
           </div>
           <div class="panel-body animated">
-              <ul class="list-group">
+            <ul class="list-group issueList">
               <li class="list-group-item" ng-if="isEmpty.issues==true">No Issues Yet</li>
-              <li ng-repeat="issue in issues" class="list-group-item"> 
+              <li ng-repeat="data in issues" class="list-group-item">
                 <div>
-                  Name : {{issue.Name}}
-                </div>              
-                <div>
-                  AssignedBy : {{issue.AssignedBy}}
+                  <span>{{data.name}}</span>
                 </div>
-                <div>
-                  Done : {{issue.Done}}
-                </div>               
-                <div>
-                  Assigned To : {{issue.AssignedTo.name}}
-                </div>                
-                <div>
-                Repeat:  {{issue.Repeat}}
+                <div class="divider"></div>
+                <div class="assigner">
+                  <img ng-src="{{data.assignedBy.image}}"/>
+                  <div>{{data.assignedBy.name}}</div>
                 </div>
+                <div class="assignee">
+                  <img ng-src="{{data.assignedTo.image}}"/>
+                  <div>{{data.assignedTo.name}}</div>
+                </div>
+
+                <div>
+                  <div class="arr-body"></div> <i class="arr-right"></i><br>
+                </div>
+                <form role="form" ng-if="data.done==false && data.mine==true" ng-submit="markDone(data)">
+                  <br/>
+                  <button type="submit" class="btn btn-default">Issue Resolved</button>
+                </form>
               </li>
             </ul>
           </div>

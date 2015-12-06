@@ -195,6 +195,86 @@ h1 {
   margin-top:6px;
 }
 
+/*issues css*/
+.issueList span {
+  font-weight: bold;
+}
+.issueList .divider {
+  margin:15px 0;
+  border-top: 1px solid #dfd7ca;
+}
+.issueList li {
+  max-width: 420px;
+  overflow: auto;
+  margin: 0 auto;
+}
+.issueList li form {
+  clear: both;
+}
+.issueList .assigner {
+  float: left;
+}
+.issueList .assignee {
+  float: right;
+}
+.issueList .assigner, .issueList .assignee {
+  max-width: 64px;
+}
+.issueList .assigner div, .issueList .assignee div {
+  width: 84px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-left: -13px;
+  margin-top: 5px;
+  padding-left:8px;
+}
+.issueList .assignee img, .issueList .assigner img {
+  width:36px;
+  max-height: 36px;
+  border-radius: 18px;
+  border:2px solid rgb(223, 215, 202);
+  box-shadow: 0px 0px 5px 2px rgb(223, 215, 202);
+}
+.arr-right {
+  transform:rotate(-45deg);
+  -webkit-transform:rotate(-45deg);
+  float:right;
+}
+.arr-right{
+  /*border: solid black;*/
+  border: solid #dfd7ca;
+  border-width: 0 5px 5px 0;
+  display: inline-block;
+  padding: 8px;
+  margin-top: -13px;
+  margin-right: 8px;
+}
+.arr-body {
+  /*border-top: 5px solid black;*/
+  border-top: 5px solid #dfd7ca;
+  margin: 32px 72px 0 64px;
+}
+.buttons {
+  overflow: auto;
+}
+.buttons button{
+  color: white;
+  min-width:20%;
+}
+.touchevents .buttons button {
+  font-size: 10px;
+  padding: 5px;
+}
+button.grey {
+  color: grey !important;
+}
+.completed {
+  color: rgb(147, 197, 75);
+}
+.incomplete {
+  color: #ED4337;
+}
+
 
 
 /*if touce device detected, then this class will be active*/

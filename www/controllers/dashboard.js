@@ -1,8 +1,10 @@
 define('controllers/dashboard.js', [], function () {
   return function controller(cp) {
     cp.register('dashboardController', ['$scope', '$rootScope', '$firebaseArray', function($scope, $rootScope, $firebaseArray) {
-      //remove
       $rootScope.pageName = 'Dashboard'
+      
+      $scope.hasHouse = $rootScope.hasHouse;
+      $scope.user = $rootScope.user;
 
       $scope.isEmpty = {};
       $scope.isEmpty.messages = false;
@@ -37,14 +39,18 @@ define('controllers/dashboard.js', [], function () {
         });
       });
 
-      //start issue list
+      //load the issues
       $rootScope.fireDB.child('houses').child($rootScope.user.house).child('issues').on("value", function (issues){
         $scope.issues = [];
         var iss = issues.val();
-        //TODO : preprocessing of messages can be done here (add user image, ect)
         for (var key in iss) {
-          //only show unresolved issues on dashboard
-          if(iss[key].Done) {
+          //mark as assigned to current user or not
+          iss[key].mine = iss[key].assignedTo.name == $rootScope.user.username;
+          //save id for later use
+          iss[key].uid = key;
+          //add the issue to the array
+          //FILTER : only show incomplete issues for this user
+          if(iss[key].assignedTo.name == $rootScope.user.username && iss[key].done != true) {
             $scope.issues.push(iss[key]);
           }
         }
@@ -52,12 +58,32 @@ define('controllers/dashboard.js', [], function () {
         //safely apply changes to scope
         if(!$scope.$$phase) { $scope.$apply(); }
       });
-      $scope.hasHouse = $rootScope.hasHouse;
-      $scope.user = $rootScope.user;
+
+      //issue filter - only show user's incomplete issues
+      $scope.issueFilter = function(issue) {
+        if(issue.assignedTo.name != $rootScope.user.username) {
+          return false;
+        }
+        if(issue.done == true) {
+          return false;
+        }
+        //return true if it passes all these filters
+        return true;
+      };
+
+      $scope.markDone = function (issue) {
+        var issue_id = issue.uid;
+        //mark issue as done
+        issue.done = true;
+        //remove the meta data we appended to it
+        delete(issue.uid);
+        delete(issue.$$hashKey);
+        delete(issue.mine);
+        $rootScope.fireDB.child('houses').child($rootScope.user.house).child('issues').child(issue_id).set(issue);
+      };
 
       //populate the shopping list
       $scope.list = [];
-
       //Populate the List
       $rootScope.fireDB.child('houses').child($rootScope.user.house).child('shoppinglist').on("value", function (items){
         $scope.list = [];

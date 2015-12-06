@@ -31,10 +31,14 @@ define('controllers/shoppinglist.js', [], function () {
         item.purchasedBy = '';
         //check for blank name or quantity
         if(item.name && item.quantity) {
-          $rootScope.fireDB.child('houses').child($rootScope.user.house).child('shoppinglist').child(item.addedBy + item.name).set(item);
-          $scope.itemName = '';
-          $scope.quantity = 1;
-          BootstrapDialog.alert(item.quantity + ' X ' + item.name + ' added to shopping list');
+          try {
+            $rootScope.fireDB.child('houses').child($rootScope.user.house).child('shoppinglist').child(item.addedBy + item.name).set(item);
+            $scope.itemName = '';
+            $scope.quantity = 1;
+            BootstrapDialog.alert(item.quantity + ' X ' + item.name + ' added to shopping list');
+          } catch (err) {
+            BootstrapDialog.alert('Invalid item name - special characters not supported');
+          }
         } else {
           BootstrapDialog.alert('Sorry, you cannot add an item with a blank name or quantity');
         }

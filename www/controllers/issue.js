@@ -61,21 +61,25 @@ define('controllers/issue.js', [], function () {
               tmp_user = $scope.roommates[key];
             }
           }
-          var assignee = {
-            'name' : tmp_user.name,
-            'image' : tmp_user.image
+          if(tmp_user) {
+            var assignee = {
+              'name' : tmp_user.name,
+              'image' : tmp_user.image
+            }
+            var temp_issue = {
+                name: $scope.newIssueText,
+                done: false,
+                assignedBy: assigner,
+                assignedTo : assignee,
+                repeat: $scope.repeat
+            }
+            $rootScope.fireDB.child('houses').child($rootScope.user.house).child('issues').push(temp_issue);
+            $('textarea').val('');
+            BootstrapDialog.alert('Issue successfully assigned to ' + assignee.name);
+            if(!$scope.$$phase) { $scope.$apply(); }
+          } else {
+            BootstrapDialog.alert('Please select a roommate to assign the issue to');
           }
-          var temp_issue = {
-              name: $scope.newIssueText,
-              done: false,
-              assignedBy: assigner,
-              assignedTo : assignee,
-              repeat: $scope.repeat
-          }
-          $rootScope.fireDB.child('houses').child($rootScope.user.house).child('issues').push(temp_issue);
-          $('textarea').val('');
-          BootstrapDialog.alert('Issue successfully assigned to ' + assignee.name);
-          if(!$scope.$$phase) { $scope.$apply(); }
         } else {
           BootstrapDialog.alert('Issue description cannot be blank');
         }
@@ -98,8 +102,6 @@ define('controllers/issue.js', [], function () {
         //return true if it passes all these filters
         return true;
       };
-
-      $scope.DisplayMode =  "Only Show my issues";
 
       $scope.filterToggle = function(flagName) {
         $scope.toggle[flagName] = !$scope.toggle[flagName];
