@@ -138,8 +138,11 @@
 
             <ul class="list-group issueList">
               <li class="list-group-item" ng-if="isEmpty.issues==true">No Issues Yet</li>
-              <li ng-repeat="data in issues" class="list-group-item" ng-if="issueFilter(data)">
-                <div>
+              <li ng-repeat="data in issues" class="list-group-item " ng-if="issueFilter(data)" >
+                <div style="background-color:#00FF99;" ng-if="data.done==true">
+                  <span>{{data.name}}</span>
+                </div>
+                 <div style="background-color:#FF3333;" ng-if="data.done!=true">
                   <span>{{data.name}}</span>
                 </div>
                 <div class="divider"></div>
