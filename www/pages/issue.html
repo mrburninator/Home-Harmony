@@ -86,9 +86,9 @@
       <div class="col-sm-12 col-md-5">
         <div class="panel panel-default">
           <div class="panel-heading">
-            <span class="panel-title"><h4>Add Issue</h4></span>
+            <span class="panel-title" data-toggle="collapse" href="#collapse1"><h4>Add Issue</h4></span>
           </div>
-          <div class="panel-body">
+          <div class="panel-body panel-collapse collapse" id="collapse1">
 
             <form ng-submit="addIssue()">
                 <!-- IssueText Area-->
@@ -116,10 +116,10 @@
 
       <div class="col-sm-12 col-md-5">
         <div class="panel panel-default">
-          <div class="panel-heading">
-            <span class="panel-title"><h4>Filters</h4></span>
+          <div class="panel-heading" >
+            <span class="panel-title" data-toggle="collapse" href="#collapse2"><h4>Filters</h4></span>
           </div>
-          <div class="panel-body">
+          <div class="panel-bod panel-collapse" id="collapse2">
             <div class="buttons">
               <button class="btn btn-default grey" style="float:left;" ng-click="filterToggle('onlyMineFlag')">Assigned To Me</button>
               <button class="btn btn-default grey" style="float:right;" ng-click="filterToggle('onlyGivenFlag')">Assigned By Me</button>
