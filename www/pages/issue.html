@@ -12,6 +12,9 @@
       overflow: auto;
       margin: 0 auto;
     }
+    .issueList li form {
+      clear: both;
+    }
     .issueList .assigner {
       float: left;
     }
@@ -22,11 +25,12 @@
       max-width: 64px;
     }
     .issueList .assigner div, .issueList .assignee div {
-      width: 89px;
+      width: 84px;
       overflow: hidden;
       text-overflow: ellipsis;
       margin-left: -13px;
       margin-top: 5px;
+      padding-left:8px;
     }
     .issueList .assignee img, .issueList .assigner img {
       width:36px;
@@ -37,6 +41,7 @@
     }
     .arr-right {
       transform:rotate(-45deg);
+      -webkit-transform:rotate(-45deg);
       float:right;
     }
     .arr-right{
@@ -54,14 +59,24 @@
       margin: 32px 72px 0 64px;
     }
     .buttons {
-      margin-bottom: 15px;
       overflow: auto;
     }
     .buttons button{
       color: white;
+      min-width:20%;
+    }
+    .touchevents .buttons button {
+      font-size: 10px;
+      padding: 5px;
     }
     button.grey {
       color: grey !important;
+    }
+    .completed {
+      color: rgb(147, 197, 75);
+    }
+    .incomplete {
+      color: #ED4337;
     }
   </style>
   <div class="text-center">
@@ -142,13 +157,16 @@
                     <div class="arr-body"></div> <i class="arr-right"></i><br>
                   </div>
 
-                  <div ng-if="data.done==true">
-                    checkmark
+                  <div class="completed" ng-if="data.done==true">
+                    Completed
                   </div>
                   <form role="form" ng-if="data.done==false && data.mine==true" ng-submit="markDone(data)">
                     <br/>
                     <button type="submit" class="btn btn-default">Issue Resolved</button>
                   </form>
+                  <div class="incomplete" ng-if="data.done==false && data.mine==false">
+                    Incomplete
+                  </div>
 
 
               </li>

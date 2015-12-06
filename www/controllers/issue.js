@@ -45,6 +45,7 @@ define('controllers/issue.js', [], function () {
         if(!$scope.$$phase) { $scope.$apply(); }
       });
 
+      //TODO : put this in an api
       //add Issue
       $scope.addIssue = function() {
         //check for invalid input
@@ -104,6 +105,7 @@ define('controllers/issue.js', [], function () {
         $scope.toggle[flagName] = !$scope.toggle[flagName];
       };
 
+      //TODO : put this in an api
       //mark an issue as done function
       $scope.markDone = function (issue) {
         var issue_id = issue.uid;

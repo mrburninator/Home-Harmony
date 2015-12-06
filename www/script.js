@@ -12,7 +12,16 @@ Rootscope variables: ($rootScope)
     isLoggedIn:
   }
 
+TODO :
+  -add new item on shopping list is acting strange
+    -should handle errors
 
+  -loading gif during login
+  -move all API calls into services so that testing can be done easily
+  -remove any unused injections
+  -testing
+  
+  -move services to separate files (extremely low priority)
 */
 
 //configure requirejs

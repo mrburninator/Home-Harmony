@@ -22,9 +22,8 @@ define('controllers/landing.js', [], function () {
           //login using firebase credentials
           userAPI.login(username, this.pwd, $scope.fireDB, function(auth){
             $scope.hasHouse = $rootScope.hasHouse;
-
+            //if true, go to dashboard.  else go to home page
             if($scope.hasHouse) {
-              //if true, go to dashboard.  else go to home page
               $location.path('dashboard');
             } else {
               $location.path('home');
@@ -37,7 +36,7 @@ define('controllers/landing.js', [], function () {
         }
       };
 
-      //TODO : implement register submit logic - register with firebase, then login
+      //implement register submit logic - register with firebase, then login
       $scope.registerSubmit = function() {
         //check for blank name, email, or password
         if(this.usr_name && this.usr_reg && this.pwd_reg) {
@@ -59,7 +58,8 @@ define('controllers/landing.js', [], function () {
           BootstrapDialog.alert('Username, Email, or Password cannot be blank');
         }
       };
-
+      
+      //TODO : put this in an api
       $scope.resetPasswordSubmit = function() {
         $rootScope.fireDB.resetPassword({
           email: this.email_reset

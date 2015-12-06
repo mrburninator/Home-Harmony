@@ -14,6 +14,7 @@ define('controllers/settings.js', [], function () {
   			}
   		);
 
+      //TODO : put this in an api
       //option to change a password
       $scope.setPasswordSubmit = function() {
         var userEmail = $rootScope.user.email;
@@ -55,6 +56,7 @@ define('controllers/settings.js', [], function () {
         if(!$scope.$$phase) { $scope.$apply(); }
       });
 
+      //TODO : put this in an api
       //TODO : need to handle case where user is logged in and in the house, but has been removed
       $scope.removeRoommate = function(name) {
         BootstrapDialog.confirm('Are you sure you want to remove ' + name + ' from ' + $rootScope.user.house + '?', function(result) {

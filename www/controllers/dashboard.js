@@ -74,6 +74,7 @@ define('controllers/dashboard.js', [], function () {
         if(!$scope.$$phase) { $scope.$apply(); }
       });
 
+      //TODO : put this in an api
       //allow users to buy for the shopping list from the dashboard
       $scope.mark = function(item) {
         item.isPurchased = true;

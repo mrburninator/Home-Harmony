@@ -119,20 +119,32 @@ h1 {
 }
 
 /* style for the messages */
-.messageList li > div{
+.messageList li > div {
   float: left;
+
 }
-.messageList li.mine > div{
+.messageList li.mine > div {
   float: right;
 }
-.messageList li > div:last-child{
-  margin:5px 0 0 16px;
+.messageList li > div:first-child {
+  width:64px;
+  max-width: 30%;
+}
+
+.messageList li > div:first-child > div {
+  overflow:hidden;
+  text-overflow: ellipsis;
+}
+
+.messageList li > div:last-child {
+  margin:5px 0 0 5%;
   background: #BDBEC2;
   color: #fff;
   padding:10px 15px;
   border-radius: 15px;
+  max-width:65%;
 }
-.messageList li.mine > div:last-child{
+.messageList li.mine > div:last-child {
   /*background: #007aff;*/
   background-color: rgb(147, 197, 75);
   margin:8px 16px 0 0;
@@ -140,6 +152,8 @@ h1 {
 .messageList li {
   clear: both;
   overflow: auto;
+  padding-right: 5px;
+  padding-left: 5px;
 }
 .messageList li img {
   height: 36px;
@@ -158,6 +172,10 @@ h1 {
 .shoppingList .item {
   float:left;
   text-align: left;
+  max-width: 60%;
+}
+.touchevents .shoppingList .item {
+  max-width: 50%;
 }
 .shoppingList .item span{
   font-weight: bold;
