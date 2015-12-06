@@ -1,94 +1,125 @@
 define('controllers/issue.js', [], function () {
   return function controller(cp) {
     cp.register('issueController', ['$scope', '$rootScope', '$firebaseArray',function($scope,$rootScope,$firebaseArray) {
-      $scope.isEmpty = {};
-      $scope.isEmpty.issues = false;
       $rootScope.pageName = 'Issues'
 
-      var baseRef = new Firebase( firebaseURL );
-      console.log('RootScope Status:', $rootScope.user);
-      var ref = baseRef.child('/houses/' + $rootScope.user.house + '/issues' );
-      //ar ref = new Firebase( firebaseURL + "/houses/houses1/issues" );
-      var authData = ref.getAuth();
+      $scope.isEmpty = {};
+      $scope.isEmpty.issues = false;
 
-      $scope.issues = $firebaseArray(ref);
+      $scope.toggle = {};
+      $scope.toggle.onlyDoneFlag = false;
+      $scope.toggle.onlyMineFlag = false;
+      $scope.toggle.onlyGivenFlag = false; //assigner flag
 
-      $scope.isEmpty.issues = $scope.issues.length > 0 ? false : true;
+      $scope.repeat = false;
 
-      $scope.choosenroommate = {"$value":" choose some one"};
-      var roomMateRef = baseRef.child('/houses/' + $rootScope.user.house +'/users');
-      $scope.roommatelist = $firebaseArray(roomMateRef);
-      $scope.Repeat = false;
-
-
-
-      var currentUserUid = {};
-      if (authData) {
-        console.log("User ID: " + authData.uid + ", Provider: " + authData.provider);
-        currentUserUid = authData.uid;
-      } else {
-        console.log("user is logged out");
-      }
-      // user is logged out
-      console.log(currentUserUid);
-
+      //load roommates here that can be assigned a task:
+      $rootScope.fireDB.child('houses').child($rootScope.user.house).child('users').on("value", function (users){
+        $scope.roommates = [];
+        var roommies = users.val() ? users.val() : {};
+        //preprocessing messages : add user image.
+        for (var key in roommies) {
+          roommies[key].image = roommies[key].image ? roommies[key].image : "assets/default_user.png";
+          $scope.roommates.push(roommies[key]);
+        }
+        $scope.isEmpty.roommates = $scope.roommates.length > 0 ? false : true;
+        if(!$scope.$$phase) { $scope.$apply(); }
+        //autoselect the first value
+        $('.dropdown select').val($scope.roommates[0].$$hashKey);
+      });
+      
+      //load the issues
+      $rootScope.fireDB.child('houses').child($rootScope.user.house).child('issues').on("value", function (issues){
+        $scope.issues = [];
+        var iss = issues.val();
+        for (var key in iss) {
+          //mark as assigned to current user or not
+          iss[key].mine = iss[key].assignedTo.name == $rootScope.user.username;
+          //save id for later use
+          iss[key].uid = key;
+          //add the issue to the array
+          $scope.issues.push(iss[key]);
+        }
+        $scope.isEmpty.issues = $scope.issues.length > 0 ? false : true;
+        //safely apply changes to scope
+        if(!$scope.$$phase) { $scope.$apply(); }
+      });
 
       //add Issue
       $scope.addIssue = function() {
-            console.log("AssignedToName" , $scope.choosenroommate);
-            $scope.issues.$add({
-                Name: $scope.newIssueText ,
-                Done: false ,
-                AssignedBy: $rootScope.user.username,
-                AssignedTo : $scope.choosenroommate ,
-                Repeat: $scope.Repeat
-            });
-
+        //check for invalid input
+        if($scope.newIssueText){
+          var assigner = {
+            'name' : $rootScope.user.username,
+            'image' : $rootScope.user.image
+          }
+          var user_id = $('.dropdown select').val();
+          var tmp_user = null;
+          for (var key in $scope.roommates) {
+            if($scope.roommates[key].$$hashKey == user_id) {
+              tmp_user = $scope.roommates[key];
+            }
+          }
+          var assignee = {
+            'name' : tmp_user.name,
+            'image' : tmp_user.image
+          }
+          var temp_issue = {
+              name: $scope.newIssueText,
+              done: false,
+              assignedBy: assigner,
+              assignedTo : assignee,
+              repeat: $scope.repeat
+          }
+          $rootScope.fireDB.child('houses').child($rootScope.user.house).child('issues').push(temp_issue);
+          $('textarea').val('');
+          BootstrapDialog.alert('Issue successfully assigned to ' + assignee.name);
+          if(!$scope.$$phase) { $scope.$apply(); }
+        } else {
+          BootstrapDialog.alert('Issue description cannot be blank');
+        }
       };
-
 
       //issue filter
-      $scope.issueFilter = function(issue,toggleFlag) {
-        if (toggleFlag)
-          return true;
-        if (issue.AssignedTo.name==$rootScope.user.username)
-        {
-            //console.log(issue);
-            return true;
+      $scope.issueFilter = function(issue) {
+        //if filtering to only mine and it doesnt match, return false
+        if($scope.toggle.onlyMineFlag && issue.assignedTo.name != $rootScope.user.username) {
+          return false;
         }
-         else return false;
+        //if filtering to only done and it doesnt match, return false
+        if($scope.toggle.onlyDoneFlag && issue.done == true) {
+          return false;
+        }
+        //if filtering to only done and it doesnt match, return false
+        if($scope.toggle.onlyGivenFlag && issue.assignedBy.name != $rootScope.user.username) {
+          return false;
+        }
+        //return true if it passes all these filters
+        return true;
       };
-
 
       $scope.DisplayMode =  "Only Show my issues";
 
-      $scope.filterToggle = function() {
-            $scope.toggleFlag = $scope.toggleFlag === false ? true: false;
-            if ($scope.toggleFlag)
-            {
-               $scope.DisplayMode =  "Show all";
-            } else {
-               $scope.DisplayMode =  "Only Show my issues";
-            }
-        };
+      $scope.filterToggle = function(flagName) {
+        $scope.toggle[flagName] = !$scope.toggle[flagName];
+      };
 
+      //mark an issue as done function
+      $scope.markDone = function (issue) {
+        var issue_id = issue.uid;
+        //mark issue as done
+        issue.done = true;
+        //remove the meta data we appended to it
+        delete(issue.uid);
+        delete(issue.$$hashKey);
+        delete(issue.mine);
+        $rootScope.fireDB.child('houses').child($rootScope.user.house).child('issues').child(issue_id).set(issue);
+      };
 
-        $scope.showDone = function(data) {
-          //console.log("in showDOne: username is ", $rootScope.user.username, "assign to",data.AssignedTo.name, "data", data);
-          if ($rootScope.user.username == data.AssignedTo.name && data.Done==false) {
-              return true;
-          }
-              return false;
-        };
-
-
-        $scope.markDone = function (issue) {
-          $scope.issues.$remove(issue);
-          issue.Done = true;
-          $scope.issues.$add(issue);
-        };
-
-
+      //add listener for button click
+      $(".buttons").off("click").on("click", "button", function(){
+        $(this).toggleClass('grey');
+      });
     }]);
   }
 });

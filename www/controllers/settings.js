@@ -1,11 +1,13 @@
 define('controllers/settings.js', [], function () {
   return function controller(cp) {
     cp.register('settingsController',['$scope', '$rootScope', 'homeAPI', function($scope, $rootScope, homeAPI) {
+      $rootScope.pageName = 'Settings'
+
       $scope.isEmpty = {};
       $scope.isEmpty.roommates = false;
-  		$rootScope.pageName = 'Settings'
+
       $scope.hasHouse = $rootScope.hasHouse;
-      	//create a watch for rootscope hasHouse
+    	//create a watch for rootscope hasHouse
   		$rootScope.$watch("hasHouse",
   			function loginChange( newValue, oldValue ) {
   				$scope.hasHouse = $rootScope.hasHouse;
@@ -39,20 +41,18 @@ define('controllers/settings.js', [], function () {
 
       //load roommates here:
       $rootScope.fireDB.child('houses').child($rootScope.user.house).child('users').once("value", function (users){
-          $scope.roommates = [];
-          console.log('loading users : ', users.val());
-          var roommies = users.val() ? users.val() : {};
-          //preprocessing messages : add user image.
-          for (var key in roommies) {
-            roommies[key].image = roommies[key].image ? roommies[key].image : "assets/default_user.png";
-            //add the user to the list if not the logged in user
-            if(roommies[key].name != $rootScope.user.username) {
-              $scope.roommates.push(roommies[key]);
-            }
+        $scope.roommates = [];
+        var roommies = users.val() ? users.val() : {};
+        //preprocessing messages : add user image.
+        for (var key in roommies) {
+          roommies[key].image = roommies[key].image ? roommies[key].image : "assets/default_user.png";
+          //add the user to the list if not the logged in user
+          if(roommies[key].name != $rootScope.user.username) {
+            $scope.roommates.push(roommies[key]);
           }
-          $scope.isEmpty.roommates = $scope.roommates.length > 0 ? false : true;
-          console.log($scope.roommates);
-          if(!$scope.$$phase) { $scope.$apply(); }
+        }
+        $scope.isEmpty.roommates = $scope.roommates.length > 0 ? false : true;
+        if(!$scope.$$phase) { $scope.$apply(); }
       });
 
       //TODO : need to handle case where user is logged in and in the house, but has been removed

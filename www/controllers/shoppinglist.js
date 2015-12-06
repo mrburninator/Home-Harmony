@@ -17,7 +17,6 @@ define('controllers/shoppinglist.js', [], function () {
           $scope.list.push(itm[key]);
         }
         $scope.list.reverse();
-        console.log('list:',$scope.list);
         $scope.isEmpty.shoppinglist = $scope.list.length > 0 ? false : true;
         //safely apply changes to scope
         if(!$scope.$$phase) { $scope.$apply(); }
@@ -45,7 +44,6 @@ define('controllers/shoppinglist.js', [], function () {
         item.purchasedBy = $rootScope.user.username;
         delete item['$$hashKey'];
         $rootScope.fireDB.child('houses').child($rootScope.user.house).child('shoppinglist').child(item.addedBy + item.name).set(item);
-        console.log("item purchased by:", item.purchasedBy);
         BootstrapDialog.alert(item.quantity + ' X ' + item.name + ' purchased!');
       };
 

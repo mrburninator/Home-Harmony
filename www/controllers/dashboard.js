@@ -3,7 +3,6 @@ define('controllers/dashboard.js', [], function () {
     cp.register('dashboardController', ['$scope', '$rootScope', '$firebaseArray', function($scope, $rootScope, $firebaseArray) {
       //remove
       $rootScope.pageName = 'Dashboard'
-      console.log('RootScope Status:', $rootScope);
 
       $scope.isEmpty = {};
       $scope.isEmpty.messages = false;
@@ -15,7 +14,6 @@ define('controllers/dashboard.js', [], function () {
       $scope.messages.everyone = [];
       //get all the users in the house
       $rootScope.fireDB.child('houses').child($rootScope.user.house).child('users').once("value", function (users){
-        console.log('loading users : ', users.val());
         $scope.users = users.val() ? users.val() : {};
         //Load the messages
         $rootScope.fireDB.child('houses').child($rootScope.user.house).child('messages').child('everyone').on("value", function (messages){
@@ -82,7 +80,6 @@ define('controllers/dashboard.js', [], function () {
         item.purchasedBy = $rootScope.user.username;
         delete item['$$hashKey'];
         $rootScope.fireDB.child('houses').child($rootScope.user.house).child('shoppinglist').child(item.addedBy + item.name).set(item);
-        console.log("item purchased by:", item.purchasedBy);
         BootstrapDialog.alert(item.quantity + ' X ' + item.name + ' purchased!');
       };
 

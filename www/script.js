@@ -86,7 +86,6 @@ app.config(function($routeProvider, localStorageServiceProvider, $controllerProv
               if (error) {
                 BootstrapDialog.alert('Could not login with username/password');
               } else {
-                console.log('authData : ', authData);
                 //save login info on success
                 $rootScope.user = {};
                 $rootScope.user.isLoggedIn = true;
@@ -196,8 +195,6 @@ app.config(function($routeProvider, localStorageServiceProvider, $controllerProv
       );
     },
     leaveHome : function(){
-      console.log('leaving home...');
-      console.log('user: ',$rootScope.user);
       $rootScope.fireDB.child('users').child($rootScope.user.username).child('houses').remove();
       $rootScope.fireDB.child('houses').child($rootScope.user.house).child('users').child($rootScope.user.username).remove();
       $rootScope.hasHouse = false;
@@ -270,11 +267,9 @@ app.config(function($routeProvider, localStorageServiceProvider, $controllerProv
       localStorageService.set('hasHouse', $scope.hasHouse);
     }
   );
-  console.log('adding listener...');
   //change page title on transition
   $rootScope.$watch("pageName",
     function loginChange( newValue, oldValue ) {
-      console.log('PAGE CHANGE DETECTED!!!');
       $scope.pageName = $rootScope.pageName;
     }
   );
@@ -315,6 +310,9 @@ app.config(function($routeProvider, localStorageServiceProvider, $controllerProv
             });
             ev.preventDefault(); //prevent the controller from being accessed before it has been loaded
           }
+          var url = "#" + next.$$route.originalPath.substr(1, next.$$route.originalPath.length-1);
+          $('#navbar li').removeClass('clicked');
+          $('#navbar a[href$="' + url + '"]').parent().addClass('clicked');
       }
     })
     //close the nav bar for mobile after selecting a view
@@ -322,12 +320,6 @@ app.config(function($routeProvider, localStorageServiceProvider, $controllerProv
       if( $(e.target).is('a')) {
         $(this).collapse('hide');
       }
-    });
-
-    //navigation listener - latest clicked item gets assigned the clicked class
-    $('#navbar').off('click').on('click', 'li', function(){
-      $('#navbar li').removeClass('clicked');
-      $(this).addClass('clicked');
     });
 });
 

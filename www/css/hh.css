@@ -9,6 +9,12 @@ view {
   /*don't allow text selection for the most part*/
   -webkit-user-select: none;
   user-select: none;
+  margin-left:15px;
+}
+
+view > div {
+  margin-left: -15px;
+  margin-right: 15px;
 }
 
 

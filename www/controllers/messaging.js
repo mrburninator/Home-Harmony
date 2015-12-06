@@ -10,7 +10,6 @@ define('controllers/messaging.js', [], function () {
       $scope.messages.everyone = [];
       //get all the users in the house
       $rootScope.fireDB.child('houses').child($rootScope.user.house).child('users').once("value", function (users){
-        console.log('loading users : ', users.val());
         $scope.users = users.val() ? users.val() : {};
 
         //populate the general house chat

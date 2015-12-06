@@ -1,68 +1,154 @@
 <view class="padded">
+  <style>
+    .issueList span {
+      font-weight: bold;
+    }
+    .issueList .divider {
+      margin:15px 0;
+      border-top: 1px solid #dfd7ca;
+    }
+    .issueList li {
+      max-width: 420px;
+      overflow: auto;
+      margin: 0 auto;
+    }
+    .issueList .assigner {
+      float: left;
+    }
+    .issueList .assignee {
+      float: right;
+    }
+    .issueList .assigner, .issueList .assignee {
+      max-width: 64px;
+    }
+    .issueList .assigner div, .issueList .assignee div {
+      width: 89px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin-left: -13px;
+      margin-top: 5px;
+    }
+    .issueList .assignee img, .issueList .assigner img {
+      width:36px;
+      max-height: 36px;
+      border-radius: 18px;
+      border:2px solid rgb(223, 215, 202);
+      box-shadow: 0px 0px 5px 2px rgb(223, 215, 202);
+    }
+    .arr-right {
+      transform:rotate(-45deg);
+      float:right;
+    }
+    .arr-right{
+      /*border: solid black;*/
+      border: solid #dfd7ca;
+      border-width: 0 5px 5px 0;
+      display: inline-block;
+      padding: 8px;
+      margin-top: -13px;
+      margin-right: 8px;
+    }
+    .arr-body {
+      /*border-top: 5px solid black;*/
+      border-top: 5px solid #dfd7ca;
+      margin: 32px 72px 0 64px;
+    }
+    .buttons {
+      margin-bottom: 15px;
+      overflow: auto;
+    }
+    .buttons button{
+      color: white;
+    }
+    button.grey {
+      color: grey !important;
+    }
+  </style>
   <div class="text-center">
 
     <div class="row">
 
-      <div class="col-sm-12 col-md-4">
+      <div class="col-sm-12 col-md-5">
         <div class="panel panel-default">
           <div class="panel-heading">
             <span class="panel-title"><h4>Add Issue</h4></span>
           </div>
           <div class="panel-body">
-            <form ng-submit="addIssue()">
 
+            <form ng-submit="addIssue()">
                 <!-- IssueText Area-->
                 <textarea ng-model="newIssueText" placeholder="add your issue" class="form-control" rows="3"></textarea>
-
                 <!-- Repeat or Not -->
                 <div class="checkbox form-group">
-                   <label class="bold"><input type="checkbox" ng-model="Repeat">Repeat</label>
+                   <label class="bold"><input type="checkbox" ng-model="repeat">Repeat</label>
                 </div>
-
                 <!-- dropdown list to choose roommate -->
                 <div class="dropdown">
-                  <!--  full info is {{choosenroommate}} -->
+                  <!--  full info is {{roommate}} -->
                   <div class="form-group">
                       <label>Assign to? :</label>
-                      <select class="form-control" data-ng-model="choosenroommate"
-                              data-ng-options="act.$id for act in roommatelist">
+                      <select class="form-control" data-ng-model="assigneeName"
+                              data-ng-options="act.name for act in roommates">
                       </select>
                  </div>
               </div>
               <button type="submit" class="btn btn-default">Submit</button>
             </form>
+
           </div>
         </div>
       </div>
 
-      <div class="col-sm-12 col-md-8">
+      <div class="col-sm-12 col-md-5">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <span class="panel-title"><h4>Filters</h4></span>
+          </div>
+          <div class="panel-body">
+            <div class="buttons">
+              <button class="btn btn-default grey" style="float:left;" ng-click="filterToggle('onlyMineFlag')">Assigned To Me</button>
+              <button class="btn btn-default grey" style="float:right;" ng-click="filterToggle('onlyGivenFlag')">Assigned By Me</button>
+              <button class="btn btn-default grey" ng-click="filterToggle('onlyDoneFlag')">Incomplete</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-sm-12 col-md-7">
         <div class="panel panel-default">
           <div class="panel-heading">
             <span class="panel-title"><h4>Issue List</h4></span>
-            <button ng-click="filterToggle()">{{DisplayMode}}</button>
           </div>
           <div class="panel-body">
 
-            <ul class="list-group">
+            <ul class="list-group issueList">
               <li class="list-group-item" ng-if="isEmpty.issues==true">No Issues Yet</li>
-              <li ng-repeat="data in issues" class="list-group-item" ng-if="issueFilter(data,toggleFlag)">
+              <li ng-repeat="data in issues" class="list-group-item" ng-if="issueFilter(data)">
+                  
+                  <div>
+                    <span>{{data.name}}</span>
+                  </div>
+                  <div class="divider"></div>
+                  <div class="assigner">
+                    <img ng-src="{{data.assignedBy.image}}"/>
+                    <div>{{data.assignedBy.name}}</div>
+                  </div>
+                  <div class="assignee">
+                    <img ng-src="{{data.assignedTo.image}}"/>
+                    <div>{{data.assignedTo.name}}</div>
+                  </div>
 
                   <div>
+                    <div class="arr-body"></div> <i class="arr-right"></i><br>
+                  </div>
 
-                    Name : {{data.Name}}
+                  <div ng-if="data.done==true">
+                    checkmark
                   </div>
-                  <div>
-                    AssignedBy : {{data.AssignedBy}}
-                  </div>
-                  <div>
-                    Done : {{data.Done}}
-                  </div>
-                  <div>
-                    Assigned To : {{data.AssignedTo.name}}
-                  </div>
-                  <div>
-                  Repeat:  {{data.Repeat}}
-                  </div>
+                  <form role="form" ng-if="data.done==false && data.mine==true" ng-submit="markDone(data)">
+                    <br/>
+                    <button type="submit" class="btn btn-default">Issue Resolved</button>
+                  </form>
 
 
               </li>

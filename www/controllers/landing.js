@@ -2,11 +2,9 @@ define('controllers/landing.js', [], function () {
   return function controller(cp) {
     cp.register('landingController', ['$scope','$rootScope','localStorageService', '$location', 'userAPI', function($scope, $rootScope, localStorageService, $location, userAPI) {
       $rootScope.pageName = 'Landing Page'
-      //TODO : get rid of redundancy here
       $scope.fireDB = new Firebase(firebaseURL);
 
       $scope.loading = false;
-      //TODO : we should be storing the username in the db
       $scope.userName = "mrburninator"; //for chat testing
       //check if the user is logged in
       //& redirect them to the dashboard if they are
@@ -21,7 +19,7 @@ define('controllers/landing.js', [], function () {
         var username = this.name;
         var password = this.pwd;
         if(username && password) {
-          //TODO : login using firebase credentials
+          //login using firebase credentials
           userAPI.login(username, this.pwd, $scope.fireDB, function(auth){
             $scope.hasHouse = $rootScope.hasHouse;
 
