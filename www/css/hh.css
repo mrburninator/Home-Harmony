@@ -12,12 +12,19 @@ view {
   margin-left:15px;
 }
 
-view > div {
-  margin-left: -15px;
-  margin-right: 15px;
+ul, li, .panel-body, .panel, .row, .row > * {
+  -webkit-transform: translate3d(0,0,0); 
 }
 
+view > * {
+  margin-left: -15px;
+  margin-right: 15px;
+  -webkit-transform: translate3d(0,0,0); 
+}
 
+.row > div {
+  -webkit-transform: translate3d(0,0,0); 
+}
 
 body,html, #hh, #root, #root > div, #root > div > div {
   height:100%;
@@ -168,6 +175,7 @@ h1 {
 
 .shoppingList li {
   overflow:auto;
+  -webkit-transform: translateZ(0);
 }
 .shoppingList .item {
   float:left;
@@ -274,8 +282,6 @@ button.grey {
 .incomplete {
   color: #ED4337;
 }
-
-
 
 /*if touce device detected, then this class will be active*/
 .touchevents #navbar a:hover {

@@ -71,7 +71,7 @@ app.config(function($routeProvider, localStorageServiceProvider, $controllerProv
   .otherwise({
     redirectTo: '/landing'
   });
-
+  
   localStorageServiceProvider
   .setPrefix('HH')
   .setStorageType('sessionStorage')
@@ -256,26 +256,36 @@ app.config(function($routeProvider, localStorageServiceProvider, $controllerProv
   $scope.loading = false;
 
   //check if the user is logged in via cache:
-  $rootScope.user = localStorageService.get('user') == null ? {isLoggedIn:false} : localStorageService.get('user');
+  if(localStorageService.isSupported) {
+    $rootScope.user = localStorageService.get('user') == null ? {isLoggedIn:false} : localStorageService.get('user');
+  } else {
+    $rootScope.user = {isLoggedIn:false};
+  }
 
   //watch the user login value so we can make sure we update the cached value
   $rootScope.$watch("user.isLoggedIn",
     function loginChange( newValue, oldValue ) {
       $scope.user = $rootScope.user;
-      localStorageService.set('user', $scope.user);
+      if(localStorageService.isSupported) {
+        localStorageService.set('user', $scope.user);
+      }
       //TODO : how does this log the user out??? // navigation change???
     }
   );
   $rootScope.$watch("user.house",
     function loginChange( newValue, oldValue ) {
-      localStorageService.set('user', $scope.user);
+      if(localStorageService.isSupported) {
+        localStorageService.set('user', $scope.user);
+      }
     }
   );
   //watch for if the user joins or leaves a house - navigation changes accordingly.
   $rootScope.$watch("hasHouse",
     function loginChange( newValue, oldValue ) {
       $scope.hasHouse = $rootScope.hasHouse;
-      localStorageService.set('hasHouse', $scope.hasHouse);
+      if(localStorageService.isSupported) {
+        localStorageService.set('hasHouse', $scope.hasHouse);
+      }
     }
   );
   //change page title on transition
@@ -286,15 +296,15 @@ app.config(function($routeProvider, localStorageServiceProvider, $controllerProv
   );
 
   //if the user is logged in, then check if they have a house they are assigned to
-  if($rootScope.user.isLoggedIn) {
+  if($rootScope.user.isLoggedIn && localStorageService.isSupported) {
     $rootScope.hasHouse = localStorageService.get('hasHouse') == null ? false : localStorageService.get('hasHouse');
   } else {
     $rootScope.hasHouse = false;
   }
-
-  localStorageService.set('user',$rootScope.user)
-  $rootScope.hasHouse = localStorageService.get('hasHouse') == null ? false : localStorageService.get('hasHouse');
-
+  
+  if(localStorageService.isSupported) {
+    localStorageService.set('user',$rootScope.user)
+  }
 
   //handle logging out - triggers a watch event
   $scope.logoutSubmit = function() {
@@ -309,7 +319,7 @@ app.config(function($routeProvider, localStorageServiceProvider, $controllerProv
     $rootScope.$on('$routeChangeStart', function (ev, next, curr) {
       if (next.$$route) {
           //when a route changes, we check that the user is logged in.  If they aren't, we redirect them to the landing page
-          var user = localStorageService.get('user');
+          var user = $rootScope.user;
           var isLoginPath = next.$$route.originalPath == "/" || next.$$route.originalPath == "/landing"
           if(!isLoginPath && !user.isLoggedIn){ $location.path('/') }
 
@@ -337,6 +347,7 @@ app.config(function($routeProvider, localStorageServiceProvider, $controllerProv
 //attach fastclick for better mobile responsiveness
 window.addEventListener('load', function () {
   FastClick.attach(document.body);
+  // $.noConflict();
 });
 
 

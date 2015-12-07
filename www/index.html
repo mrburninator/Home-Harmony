@@ -24,6 +24,7 @@
               <span class="icon-bar"></span>
               <span class="icon-bar"></span>
             </button>
+            <!--TODO : make this a function call instead of link- -->
             <a class="navbar-brand" href="#landing" ng-hide="user.isLoggedIn==true && hasHouse==true">Home Harmony</a>
             <a class="navbar-brand" href="#dashboard" ng-hide="user.isLoggedIn==false || hasHouse==false">Home Harmony</a>
           </div>
@@ -48,10 +49,8 @@
       </div>
 
     </body>
-    <!--JQuery library-->
-    <script src="js/jquery-2.1.4.js"></script>
     <!--Angular library & extensions-->
-    <script src="js/angular/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
     <script src="js/angular/angular-route.min.js"></script>
     <script src="js/angular/angular-animate.min.js"></script>
     <script src="js/angular/angular-local-storage.js"></script>
@@ -69,6 +68,8 @@
     <script src="js/modernizr-custom.js"></script>
     <!--RequireJS-->
     <script src="js/require.js"></script>
+    <!--JQuery library-->
+    <script src="js/jquery-2.1.4.js"></script>
     <!--Bootstrap JS-->
     <script src="js/bootstrap.min.js"></script>
     <script src="js/bootstrap-dialog.min.js"></script>

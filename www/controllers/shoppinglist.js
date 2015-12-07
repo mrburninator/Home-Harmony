@@ -19,6 +19,7 @@ define('controllers/shoppinglist.js', [], function () {
         $scope.isEmpty.shoppinglist = $scope.list.length > 0 ? false : true;
         //safely apply changes to scope
         if(!$scope.$$phase) { $scope.$apply(); }
+        setTimeout(function(){ $('ul').toggleClass('refresh'); }, 600);
       });
 
       //TODO : put this in an api
@@ -56,4 +57,3 @@ define('controllers/shoppinglist.js', [], function () {
     }]);
   }
 });
-

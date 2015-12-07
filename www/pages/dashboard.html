@@ -29,14 +29,13 @@
           <div class="panel-body animated">
             <ul class="list-group messageList">
               <li class="list-group-item" ng-if="isEmpty.messages==true">No Messages Received</li>
-              <li ng-repeat-start="data in messages.everyone" class="list-group-item" ng-class="{mine : data.mine}">
+              <li ng-repeat="data in messages.everyone" class="list-group-item" ng-class="{mine : data.mine}">
                 <div>
                   <img ng-src="{{data.image}}"/>
                   <div>{{data.name}}</div>
                 </div>
                 <div>{{data.message}}</div>
               </li>
-              <div ng-repeat-end></div>
             </ul>
           </div>
         </div>

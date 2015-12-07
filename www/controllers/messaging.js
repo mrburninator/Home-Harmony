@@ -31,6 +31,7 @@ define('controllers/messaging.js', [], function () {
           $scope.isEmpty.messages = $scope.messages.everyone.length > 0 ? false : true;
           //safely apply changes to scope
           if(!$scope.$$phase) { $scope.$apply(); }
+          setTimeout(function(){ $('ul').toggleClass('refresh'); }, 600);
         });
         //TODO : future work - other, private message, chats
       });
