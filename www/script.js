@@ -17,14 +17,19 @@ TODO :
   -move all API calls into services so that testing can be done easily
   -remove any unused injections
   -testing
-  
+
   -move services to separate files (extremely low priority)
 */
+
+var test1 = function() {
+  return 'hello';
+};
 
 //configure requirejs
 requirejs.config({
   baseUrl: '/'
 });
+
 
 var firebaseURL = "https://blazing-heat-3750.firebaseio.com"; // Qingyu's FB
 //var firebaseURL = "https://dazzling-torch-6918.firebaseio.com"; // Robert's FB
@@ -333,3 +338,17 @@ app.config(function($routeProvider, localStorageServiceProvider, $controllerProv
 window.addEventListener('load', function () {
   FastClick.attach(document.body);
 });
+
+
+
+var hello = function() {
+  return 'hello';
+};
+var loginSubmit = function(username,password) {
+        if(username && password) {
+          //login using firebase credentials
+          userAPI.login(username, password, $scope.fireDB, function(auth){
+            return "true"
+         });
+
+}};

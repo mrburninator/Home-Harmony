@@ -1,4 +1,5 @@
 describe('Home Harmony - Sample Test', function() {
+<<<<<<< HEAD
     it('should just pass this one', function() {
       
       beforeEach(function(){
@@ -9,6 +10,13 @@ describe('Home Harmony - Sample Test', function() {
       });
       expect(true).to.equal(true);
   });
+=======
+
+  it('should just pass this one', function() {
+    expect(true).to.equal(true);
+ });
+
+>>>>>>> 78a90f748cf1602a88ac6e61e4aec8e83408e76b
 
 });
 
