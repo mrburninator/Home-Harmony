@@ -59,11 +59,13 @@
       margin: 32px 72px 0 64px;
     }
     .buttons {
+      margin:15px;
       overflow: auto;
     }
     .buttons button{
       color: white;
       min-width:20%;
+      max-width:30%;
     }
     .touchevents .buttons button {
       font-size: 10px;
@@ -83,13 +85,13 @@
 
     <div class="row">
 
-      <div class="col-sm-12 col-md-5">
+      <div class="col-sm-12 col-md-6">
         <div class="panel panel-default">
           <div class="panel-heading">
-            <span class="panel-title" data-toggle="collapse" href="#collapse1"><h4>Add Issue</h4></span>
+            <span class="panel-title"><h4>Add Issue</h4></span>
           </div>
-          <div class="panel-body panel-collapse collapse" id="collapse1">
-
+          <div class="panel-body">
+            
             <form ng-submit="addIssue()">
                 <!-- IssueText Area-->
                 <textarea ng-model="newIssueText" placeholder="add your issue" class="form-control" rows="3"></textarea>
@@ -114,12 +116,12 @@
         </div>
       </div>
 
-      <div class="col-sm-12 col-md-5">
+      <div class="col-sm-12 col-md-6">
         <div class="panel panel-default">
           <div class="panel-heading" >
-            <span class="panel-title" data-toggle="collapse" href="#collapse2"><h4>Filters</h4></span>
+            <span class="panel-title"><h4>Filters</h4></span>
           </div>
-          <div class="panel-bod panel-collapse" id="collapse2">
+          <div class="panel-bod">
             <div class="buttons">
               <button class="btn btn-default grey" style="float:left;" ng-click="filterToggle('onlyMineFlag')">Assigned To Me</button>
               <button class="btn btn-default grey" style="float:right;" ng-click="filterToggle('onlyGivenFlag')">Assigned By Me</button>
@@ -129,7 +131,7 @@
         </div>
       </div>
 
-      <div class="col-sm-12 col-md-7">
+      <div class="col-sm-12 col-md-6">
         <div class="panel panel-default">
           <div class="panel-heading">
             <span class="panel-title"><h4>Issue List</h4></span>
@@ -139,10 +141,10 @@
             <ul class="list-group issueList">
               <li class="list-group-item" ng-if="isEmpty.issues==true">No Issues Yet</li>
               <li ng-repeat="data in issues" class="list-group-item " ng-if="issueFilter(data)" >
-                <div style="background-color:#00FF99;" ng-if="data.done==true">
+                <div ng-if="data.done==true">
                   <span>{{data.name}}</span>
                 </div>
-                 <div style="background-color:#FF3333;" ng-if="data.done!=true">
+                 <div ng-if="data.done!=true">
                   <span>{{data.name}}</span>
                 </div>
                 <div class="divider"></div>
