@@ -1,26 +1,60 @@
-body { padding-top: 50px; }
+body { padding-top: 60px; }
 
-ui-view {
-    display:block;
-    width:100%;
-    height:100%;
+view {
+  display:block;
+  width:100%;
+  height:100%;
+  overflow:scroll;
+  -webkit-overflow-scrolling: touch;
+  /*don't allow text selection for the most part*/
+  -webkit-user-select: none;
+  user-select: none;
+  margin-left:15px;
 }
+
+view > div {
+  margin-left: -15px;
+  margin-right: 15px;
+}
+
+
 
 body,html, #hh, #root, #root > div, #root > div > div {
-    height:100%;
-    width:100%;
+  height:100%;
+  width:100%;
 }
 body {
-    background:#f2f2f2;
+  background:#f2f2f2;
+}
+.enable {
+  color:green;
+  font-weight:bold;
+}
+
+.disable {
+  color:grey;
 }
 
 .subview {
-    padding:15px;
-    background:rgba(255,255,255,1);
-    border-radius: 15px;
-    margin-top:15px;
-    border:1px solid #ddd;    
-    -webkit-box-shadow: rgba(255, 255, 255, 0.6) 0px 5px 0px 0px inset, rgba(0, 0, 0, 0.2) 0px 3px 7px 0px;
+  padding:15px;
+  background:rgba(255,255,255,1);
+  border-radius: 15px;
+  border:1px solid #ddd;    
+  -webkit-box-shadow: rgba(255, 255, 255, 0.6) 0px 5px 0px 0px inset, rgba(0, 0, 0, 0.2) 0px 3px 7px 0px;
+}
+
+.padded {
+  padding:15px;
+}
+
+.animated {
+  transition-duration: 500;
+}
+
+.untoggled > .panel-body {
+  height:0;
+  padding:0;
+  overflow:hidden;
 }
 
 /*
@@ -32,8 +66,8 @@ body {
 }
 
 .view-animate {
-    transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) .5s;
-    width:100%;
+  transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) .5s;
+  width:100%;
 }
 
 .view-animate.ng-enter, .view-animate.ng-leave {
@@ -67,3 +101,189 @@ body {
     z-index:999;
 }
 
+textarea {
+    resize:none;
+}
+
+h4 {
+  color:rgb(102, 101, 89);
+}
+
+h1 {
+  margin-top:0px;
+  margin-bottom:15px;
+}
+
+.bold {
+  font-weight: bold !important;
+}
+
+/* style for the messages */
+.messageList li > div {
+  float: left;
+
+}
+.messageList li.mine > div {
+  float: right;
+}
+.messageList li > div:first-child {
+  width:64px;
+  max-width: 30%;
+}
+
+.messageList li > div:first-child > div {
+  overflow:hidden;
+  text-overflow: ellipsis;
+}
+
+.messageList li > div:last-child {
+  margin:5px 0 0 5%;
+  background: #BDBEC2;
+  color: #fff;
+  padding:10px 15px;
+  border-radius: 15px;
+  max-width:65%;
+}
+.messageList li.mine > div:last-child {
+  /*background: #007aff;*/
+  background-color: rgb(147, 197, 75);
+  margin:8px 16px 0 0;
+}
+.messageList li {
+  clear: both;
+  overflow: auto;
+  padding-right: 5px;
+  padding-left: 5px;
+}
+.messageList li img {
+  height: 36px;
+  border-radius: 18px;
+/*  border:2px solid #ccc;*/
+  border:2px solid rgb(223, 215, 202);
+  min-height:36px;
+  min-width:36px;
+  background-color: #f6f6f6;
+  box-shadow: 0px 0px 5px 2px rgb(223, 215, 202);
+}
+
+.shoppingList li {
+  overflow:auto;
+}
+.shoppingList .item {
+  float:left;
+  text-align: left;
+  max-width: 60%;
+}
+.touchevents .shoppingList .item {
+  max-width: 50%;
+}
+.shoppingList .item span{
+  font-weight: bold;
+}
+.shoppingList .purchase {
+  float:right;
+}
+.shoppingList .checkmark {
+  height:48px;
+  width:48px;
+  padding:10px;
+  float:right;
+  border:1px solid rgb(223, 215, 202);
+  border-radius:32px;
+  /*background-color: rgb(248, 245, 240);*/
+  background-color: #f6f6f6;
+  margin-top:6px;
+}
+
+/*issues css*/
+.issueList span {
+  font-weight: bold;
+}
+.issueList .divider {
+  margin:15px 0;
+  border-top: 1px solid #dfd7ca;
+}
+.issueList li {
+  max-width: 420px;
+  overflow: auto;
+  margin: 0 auto;
+}
+.issueList li form {
+  clear: both;
+}
+.issueList .assigner {
+  float: left;
+}
+.issueList .assignee {
+  float: right;
+}
+.issueList .assigner, .issueList .assignee {
+  max-width: 64px;
+}
+.issueList .assigner div, .issueList .assignee div {
+  width: 84px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-left: -13px;
+  margin-top: 5px;
+  padding-left:8px;
+}
+.issueList .assignee img, .issueList .assigner img {
+  width:36px;
+  max-height: 36px;
+  border-radius: 18px;
+  border:2px solid rgb(223, 215, 202);
+  box-shadow: 0px 0px 5px 2px rgb(223, 215, 202);
+}
+.arr-right {
+  transform:rotate(-45deg);
+  -webkit-transform:rotate(-45deg);
+  float:right;
+}
+.arr-right{
+  /*border: solid black;*/
+  border: solid #dfd7ca;
+  border-width: 0 5px 5px 0;
+  display: inline-block;
+  padding: 8px;
+  margin-top: -13px;
+  margin-right: 8px;
+}
+.arr-body {
+  /*border-top: 5px solid black;*/
+  border-top: 5px solid #dfd7ca;
+  margin: 32px 72px 0 64px;
+}
+.buttons {
+  overflow: auto;
+}
+.buttons button{
+  color: white;
+  min-width:20%;
+}
+.touchevents .buttons button {
+  font-size: 10px;
+  padding: 5px;
+}
+button.grey {
+  color: grey !important;
+}
+.completed {
+  color: rgb(147, 197, 75);
+}
+.incomplete {
+  color: #ED4337;
+}
+
+
+
+/*if touce device detected, then this class will be active*/
+.touchevents #navbar a:hover {
+  color:#98978b;
+  background-color: transparent;
+}
+
+.touchevents #navbar .clicked a {
+  color: #ffffff;
+  background-color: transparent;
+}

@@ -1,54 +1,98 @@
-<div class="text-center">
-    <ui-view id="loginView">
-      <h2>Login</h2>
-      <style>
-      .form-group {
-        margin:0 auto  15px auto;
-        max-width:300px;
-      }
-      </style>
-      <div>
-          <div class="row">
-            <div class="col-xs-1 col-sm-4 col-md-4"></div>
-            <div class="col-xs-10 col-sm-4 col-md-4 subview">
-              <form role="form" ng-submit="loginSubmit()">
-                <div class="form-group">
-                  <label for="usr">Name:</label>
-                  <input type="text" class="form-control" ng-model="usr">
-                </div>
-                <div class="form-group">
-                  <label for="pwd">Password:</label>
-                  <input type="password" class="form-control" ng-model="pwd">
-                </div>
-                <button type="submit" class="btn btn-default">Log In</button>
-                <br><br>
-                <button type="button" class="btn btn-default toggle_view">Create Account</button>
-              </form>
-            </div>
+<view id="loginView">
+  <div class="text-center">
+    <style>
+    h2 {
+      margin-top:10px;
+    }
+    .row {
+      margin-right:0;
+      margin-left:-5px;
+    }
+    .form-group {
+      margin:0 auto  15px auto;
+      max-width:300px;
+    }
+    .toggle_view {
+      cursor: pointer;
+    }
+    .line {
+      border-top:1px solid #ccc;
+      width:100%;
+    }
+    </style>
+    <h2>Login</h2>
+    <div class="row">
+      <div class="col-xs-1 col-sm-4 col-md-4"></div>
+      <div class="col-xs-10 col-sm-4 col-md-4 subview">
+        <form role="form" ng-submit="loginSubmit()">
+          <div class="form-group">
+            <label for="name">Username:</label>
+            <input type="text" class="form-control" ng-model="name"/>
           </div>
-      </div>
-    </ui-view>
-    <ui-view  id="registerView" class="hidden">
-      <h2>Register</h2>
-      <div>
-          <div class="row">
-            <div class="col-xs-1 col-sm-4 col-md-4"></div>
-            <div class="col-xs-10 col-sm-4 col-md-4 subview">
-              <form role="form" ng-submit="registerSubmit()">
-                <div class="form-group">
-                  <label for="usr_reg">Name:</label>
-                  <input type="text" class="form-control" ng-model="usr_reg">
-                </div>
-                <div class="form-group">
-                  <label for="pwd_reg">Password:</label>
-                  <input type="password" class="form-control" ng-model="pwd_reg">
-                </div>
-                <button type="submit" class="btn btn-default">Create Account</button>
-                <br><br>
-                <button type="button" class="btn btn-default toggle_view">Log In</button>
-              </form>
-            </div>
+          <div class="form-group">
+            <label for="pwd">Password:</label>
+            <input type="password" class="form-control" ng-model="pwd"/>
           </div>
+          <button type="submit" class="btn btn-default">Log In</button>
+          <br/><br/><div class="line"></div><br/>
+          <div class="toggle_view" value="register">Don't have an account? <a>Create Account</a></div>
+               <br/><div class="line"></div><br/>
+          <div class="toggle_view" value="reset">Forgot your password? <a>Reset Password</a></div>
+          <br/>
+        </form>
       </div>
-    </ui-view>
-</div>
+    </div>
+  </div>
+</view>
+
+<view  id="registerView" class="hidden">
+  <div class="text-center">
+    <h2>Register</h2>
+    <div class="row">
+      <div class="col-xs-1 col-sm-4 col-md-4"></div>
+      <div class="col-xs-10 col-sm-4 col-md-4 subview">
+        <form role="form" ng-submit="registerSubmit()">
+          <div class="form-group">
+            <label for="usr_name">Username:</label>
+            <input type="text" class="form-control" ng-model="usr_name"/>
+          </div>
+          <div class="form-group">
+            <label for="usr_reg">Email:</label>
+            <input type="text" class="form-control" ng-model="usr_reg"/>
+          </div>
+          <div class="form-group">
+            <label for="pwd_reg">Password:</label>
+            <input type="password" class="form-control" ng-model="pwd_reg"/>
+          </div>
+          <button type="submit" class="btn btn-default">Create Account</button>
+          <br/><br/><div class="line"></div><br/>
+          <div class="toggle_view" value="login">Already have an account? <a>Login</a></div>
+          <br/>
+        </form>
+      </div>
+    </div>
+  </div>
+</view>
+
+<view  id="resetView" class="hidden">
+  <div class="text-center">
+  <h2>Reset Password</h2>
+  <div>
+      <div class="row">
+        <div class="col-xs-1 col-sm-4 col-md-4"></div>
+        <div class="col-xs-10 col-sm-4 col-md-4 subview">
+          <form role="form" ng-submit="resetPasswordSubmit()">
+            <div class="form-group">
+              <label for="email_reset">Email:</label>
+              <input type="text" class="form-control" ng-model="email_reset"/>
+            </div>
+            <button type="submit" class="btn btn-default">Reset Password</button>
+            <br/><br/><div class="line"></div><br/>
+            <div class="toggle_view" value="login">Remember your password? <a>Login</a></div>
+            <br/>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</view>

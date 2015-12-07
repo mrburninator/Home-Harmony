@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>7DFAE7C9-B6DF-454C-AB50-8AB5738999DA</string>
+	<key>IDESourceControlProjectName</key>
+	<string>HomeHarmony</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>31E948ACAF94B67FAA1EB3332AFBA06C63AB8E4E</key>
+		<string>https://github.com/mrburninator/Home-Harmony.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>platforms/ios/HomeHarmony.xcodeproj</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>31E948ACAF94B67FAA1EB3332AFBA06C63AB8E4E</key>
+		<string>../../../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/mrburninator/Home-Harmony.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>31E948ACAF94B67FAA1EB3332AFBA06C63AB8E4E</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>31E948ACAF94B67FAA1EB3332AFBA06C63AB8E4E</string>
+			<key>IDESourceControlWCCName</key>
+			<string>Home-Harmony</string>
+		</dict>
+	</array>
+</dict>
+</plist>

@@ -1,5 +1,41 @@
-<div class="text-center">
-	<h1>Home Page</h1>
-	
-	<p>{{ message }}</p>
-</div>
+<view class="padded">
+  <div class="text-center">
+    <h1>Home Page</h1>
+    
+    <div class="row">
+      <div class="col-xs-12 col-sm-6 col-md-6">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <span class="panel-title">Create A New Home</span>
+          </div>
+          <div class="panel-body">
+              <form role="form" ng-submit="createHomeSubmit()">
+                <div class="form-group">
+                  <label for="home_name">Home Name:</label>
+                  <input type="text" class="form-control" ng-model="home_name"/>
+                </div>
+                <button type="submit" class="btn btn-default toggle_view">Create!</button>
+              </form>
+          </div>
+        </div>
+      </div>
+        
+      <div class="col-xs-12 col-sm-6 col-md-6">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <span class="panel-title">Join an Existing Home</span>
+          </div>
+          <div class="panel-body">
+              <form role="form" ng-submit="joinHomeSubmit()">
+                <div class="form-group">
+                  <label for="home_id">Home Name:</label>
+                  <input type="text" class="form-control" ng-model="home_id"/>
+                </div>
+                <button type="submit" class="btn btn-default toggle_view">Join!</button>
+              </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</view>

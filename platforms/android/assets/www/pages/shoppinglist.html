@@ -1,6 +1,72 @@
-<div class="text-center">
-    <h1>Shopping List Page</h1>
-    
-    <p>static message here</p>
-    <p>{{ message }}</p>
-</div>
+<view class="padded">
+  <style>
+    li {
+      overflow:auto;
+    }
+    .item {
+      float:left;
+    }
+    .purchase {
+      float:right;
+    }
+    .checkmark {
+      height:48px;
+      width:48px;
+      padding:10px;
+      float:right;
+      border:1px solid rgb(223, 215, 202);
+      border-radius:32px;
+      /*background-color: rgb(248, 245, 240);*/
+      background-color: #f6f6f6;
+      margin-top:6px;
+    }
+  </style>
+  <div class="text-center">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <span class="panel-title"><h4>Add New Item</h4></span>
+      </div>
+      <div class="panel-body">
+        <form ng-submit="addItem()">
+          <div class="form-group">
+            <label>Name:</label>
+            <input ng-model="itemName" type="text" class="form-control" name="FirstName">
+          </div>
+          <div class="form-group">
+            <label>Quantity:</label>
+            <input ng-model="quantity" type="text" class="form-control" name="FirstName"><br>
+          </div>
+          <button type="submit" class="btn btn-default">Add Item</button>
+        </form>
+      </div>
+    </div>
+
+    <div class="panel panel-default">
+      <div class="panel-heading">
+          <span class="panel-title"><h4>Shopping List</h4></span>
+      </div>
+      <div class="panel-body">
+          <ul class="list-group">
+            <li class="list-group-item" ng-if="isEmpty.shoppinglist==true">No Shopping List Items</li>
+            <li ng-repeat="data in list" class="list-group-item">
+              <div class="item">
+                <div>
+                  Name : {{data.name}}
+                </div>
+                <div>
+                  Quantity : {{data.quantity}}
+                </div>
+                <div class="purchased" ng-if="data.purchasedBy.length > 0">Purchased by: {{data.purchasedBy}}</div>
+              </div>
+
+              <form class="purchase" ng-if="data.isPurchased==false" ng-submit="mark(data)">
+                <button type="submit" class="btn btn-default">Purchased</button>
+              </form>
+              <img class="checkmark" ng-if="data.isPurchased==true" src="assets/checkmark.png"/>
+            </li>
+          </ul>
+      </div>
+    </div>
+
+  </div>
+</view>
