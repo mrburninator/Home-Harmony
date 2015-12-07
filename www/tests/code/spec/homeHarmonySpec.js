@@ -2,13 +2,7 @@ describe('Home Harmony - Sample Test', function() {
 
   it('should just pass this one', function() {
     expect(true).to.equal(true);
-  });
-
-  it('test1() should return hello', function() {
-    var value = test1();
-    expect(value).to.equal('hello');
-  });
-
+ });
 
 
 });
