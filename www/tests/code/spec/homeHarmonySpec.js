@@ -1,6 +1,13 @@
 describe('Home Harmony - Sample Test', function() {
     it('should just pass this one', function() {
-    expect(true).to.equal(true);
+      
+      beforeEach(function(){
+        module('main');
+        inject(function (_userAPI_ ) {
+            userAPI = _userAPI_;
+        })
+      });
+      expect(true).to.equal(true);
   });
 
 });
